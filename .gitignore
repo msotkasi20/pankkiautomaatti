@@ -4,3 +4,7 @@ bank-automat/*.user
 .DS_Store
 .env
 backend/.env
+.vscode
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+.vscode/settings.json
