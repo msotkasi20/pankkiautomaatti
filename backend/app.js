@@ -1,11 +1,14 @@
 import express from 'express';
 import mysql from 'mysql2/promise';
 import logger from 'morgan';
-import indexRouter from './routes/index.js';
-import usersRouter from './routes/users.js';
+import customerRouter from './routes/customer.js';
+import accountsRouter from './routes/accounts.js';
+import cardRouter from './routes/card.js';
+import transactionRouter from './routes/transaction.js';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -40,8 +43,10 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/customer', customerRouter);
+app.use('/accounts', accountsRouter);
+app.use('/cards', cardRouter);
+app.use('/transaction', transactionRouter);
 
 // Default error handler
 app.use((err, req, res, next) => {
