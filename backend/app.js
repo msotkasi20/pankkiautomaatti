@@ -45,7 +45,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/customer', customerRouter);
 app.use('/accounts', accountsRouter);
-app.use('/cards', cardRouter);
+app.use('/card', cardRouter);
 app.use('/transaction', transactionRouter);
 
 // Default error handler
