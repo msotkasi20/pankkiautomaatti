@@ -1,10 +1,10 @@
 import express from 'express';
 import mysql from 'mysql2/promise';
 import logger from 'morgan';
-import customerRouter from './routes/customer.js';
-import accountsRouter from './routes/accounts.js';
-import cardRouter from './routes/card.js';
-import transactionRouter from './routes/transaction.js';
+import customerRouter from './routes/customerRouter.js';
+import accountsRouter from './routes/accountsRouter.js';
+import cardRouter from './routes/cardRouter.js';
+import transactionRouter from './routes/transactionRouter.js';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
