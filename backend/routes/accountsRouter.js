@@ -1,17 +1,29 @@
+// routes/accountsRouter.js
 import express from 'express';
+import { getAllAccounts, getAccountsById } from '../models/accountsModel.js';
+
 const router = express.Router();
 
-// GET all accounts
-router.get('/', async (req, res) => {
-  // Logic to fetch all accounts
-  res.json({ message: 'Get all accounts' });
+// Hakee kaikki tilit
+router.get('/', async (req, res, next) => {
+ try {
+    const accounts = await getAllAccounts(req.pool);
+    res.json({ success: true, data: accounts });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
-// GET a single account by ID
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
-  // Logic to fetch an account by ID
-  res.json({ message: `Get account with ID: ${id}` });
+// Hakee yksittäisen tilin ID:n perusteella
+router.get('/:id', async (req, res, next) => {
+  try {
+    const accounts = await getAccountsById(req.pool, req.params.id);
+    res.json({ success: true, data: accounts });
+  } catch (error) {
+    console.error(error.message);
+    res.status(404).json({ success: false, error: error.message });
+  }
 });
 
 export default router;
