@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `oamkR5ATM`.`transaction` (
   `action` VARCHAR(45) NULL,
   `actiontimestamp` TIMESTAMP NULL,
   `amount` DOUBLE NULL,
-  `idaccounts` INT NULL,
+  `idaccounts` INT NOT NULL,
   PRIMARY KEY (`idtransaction`),
   INDEX `idaccount_idx` (`idaccounts` ASC) VISIBLE,
   CONSTRAINT `idaccounts`
