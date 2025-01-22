@@ -1,6 +1,13 @@
-// routes/customerRouter.js
+// routes/tranactionRouter.js
 import express from 'express';
-import { getAlltransaction, getTransactionById } from '../models/transactionModel.js';
+import { 
+  getAlltransaction, 
+  getTransactionById,
+  addTransaction,
+  updateTransaction,
+  deleteTransaction,
+  getAccountById
+ } from '../models/transactionModel.js';
 
 const router = express.Router();
 
@@ -26,4 +33,79 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
+//luo uuden transaction
+router.post('/', async (req, res) => {
+
+  const {action, actiontimestamp, amount, idaccounts } = req.body;
+
+  //tarkistetaan, että kaikki vaaditut kentät ovat läsnä
+  if (!action || !actiontimestamp || !amount || !idaccounts) {
+    return res.status(400).json({
+      success: false,
+      message: 'Missing required fields: action, actiontimestamp, amount, idaccounts'
+    });
+  }
+  try {
+    const newTransaction = await addTransaction(req.pool, req.body);
+    res.status(201).json(newTransaction); //palauttaa uuden transaction tiedot
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({error: error.message});
+    
+  }
+});
+
+//päivittää olemassa olevan transaction
+router.put('/:id', async (req, res) => {
+
+  const { action, actiontimestamp, amount, idaccounts } = req.body;
+
+  if (!action || !actiontimestamp || !amount || !idaccounts) {
+    return res.status(400).json({
+      success: false,
+      message: 'Missing required fields: action, actiontimestamp, amount, idaccounts'
+    });
+  }
+
+  try {
+    // Haetaan tilin tiedot tarkistusta varten
+    const account = await getAccountById(req.pool, idaccounts);
+    if (!account) {
+      return res.status(404).json({
+        success: false,
+        message: 'Account not found',
+      });
+    }
+
+    // Tarkistetaan, onko tilillä tarpeeksi rahaa
+    if (account.balance < amount) {
+      return res.status(400).json({
+        success: false,
+        message: 'Insufficient balance for this withdrawal',
+      });
+    }
+
+    // Päivitetään nosto transactioniin
+    const updatedTransaction = await updateTransaction(req.pool, req.params.id, req.body);
+    res.json({
+      success: true,
+      data: updatedTransaction,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+//poistaa transaction
+
+router.delete ('/:id', async (req, res) => {
+  try {
+    const message = await deleteTransaction(req.pool, req.params.id); //kutsuu modelin deleteTransaction funktiota
+    res.json(message); //palauttaa poistoviestin
+  } catch (error) {
+    console.error(error.message);
+    res.status(404),json({error: error.message});
+  }
+});
 export default router;
