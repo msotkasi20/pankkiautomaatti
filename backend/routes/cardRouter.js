@@ -1,5 +1,8 @@
 import express from 'express';
 import { getAllCards, getCardById } from '../models/cardModel.js';
+import { createCard } from '../models/cardModel.js';
+import { updateCard } from '../models/cardModel.js';
+import { deleteCard } from '../models/cardModel.js';
 const router = express.Router();
 
 // GET all cards
@@ -26,5 +29,41 @@ router.get('/:id', async (req, res) => {
   // Logic to fetch a card by ID
   res.json({ message: `Get card with ID: ${id}` });
 }});
+
+//POST a new card
+router.post('/', async (req, res) => {
+  try {
+    const card = await createCard(req.pool, req.body);
+    res.status(201).json({ success: true, data: card }); 
+  } catch (error) {
+    console.error(error.message);
+    res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// PUT update a card by ID
+
+router.put('/:id', async (req, res) => {
+  try{
+    const updatedCard = await updateCard(req.pool, req.params.id, req.body);
+    res.json({ success: true, data: updatedCard });
+  } catch (error) {
+    console.error(error.message);
+    res.status(401).json({ success: false, error: error.message });
+  }
+});
+
+// DELETE a card by ID
+
+router.delete('/:id', async (req, res) => {
+  try{
+    const card = await deleteCard(req.pool, req.params.id);
+    res.json({ success: true, data: card });
+  } catch (error) {
+    console.error(error.message);
+    res.status(400).json({ success: false, error: error.message });
+  }
+
+  });
 
 export default router;
