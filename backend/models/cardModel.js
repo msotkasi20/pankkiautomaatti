@@ -12,7 +12,7 @@ export async function getAllCards(pool) {
 export async function getCardById(pool, id) {
     try{
         const [rows] = await pool.query('SELECT * FROM card WHERE idcard = ?', [id]);
-        if (rows.length == 0) {
+        if (rows.length === 0) {
             throw new Error('Card not found');
 
         }
@@ -65,7 +65,7 @@ export async function encryptCardPin(cardpin) {
 export async function updateCard(pool, id, card){
     try {
         const [rows] = await pool.query('UPDATE card SET type = ?, cardpin = ? WHERE idcard = ?', [card.type, card.cardpin, id]);
-        if (rows.length == 0) {
+        if (rows.length === 0) {
             throw new Error('Card not found');
 
         }
@@ -78,7 +78,7 @@ export async function updateCard(pool, id, card){
 export async function deleteCard(pool, id){
     try{
         const [rows] = await pool.query('DELETE FROM card WHERE idcard = ?', [id]);
-        if (rows.length == 0) {
+        if (rows.length === 0) {
             throw new Error('Card not found');
 
         }
