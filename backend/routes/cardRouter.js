@@ -30,16 +30,43 @@ router.get('/:id', async (req, res) => {
   res.json({ message: `Get card with ID: ${id}` });
 }});
 
-//POST a new card
+// POST create a new card
 router.post('/', async (req, res) => {
   try {
-    const card = await createCard(req.pool, req.body);
-    res.status(201).json({ success: true, data: card }); 
+    console.log("Request body:", req.body); // Loggaa saapuva syöte
+
+    // Tarkistetaan, että syöte sisältää 'type' ja 'cardpin'
+    const { type, cardpin } = req.body;
+
+    if (!type || !cardpin) {
+      return res.status(400).json({
+        success: false,
+        error: "'type' and 'cardpin' are required fields",
+      });
+    }
+
+    // Lisätään tarvittaessa tarkistus hyväksytyille ENUM-arvoille
+    const validTypes = ['debit', 'credit', 'dual'];
+    if (!validTypes.includes(type)) {
+      return res.status(400).json({
+        success: false,
+        error: `'type' must be one of the following: ${validTypes.join(', ')}`,
+      });
+    }
+
+    // Kutsutaan createCard-funktiota
+    const card = await createCard(req.pool, { type, cardpin });
+
+    // Palautetaan luodun kortin tiedot
+    res.status(201).json({ success: true, data: card });
   } catch (error) {
     console.error(error.message);
-    res.status(400).json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: error.message });
   }
 });
+
+
+
 
 // PUT update a card by ID
 

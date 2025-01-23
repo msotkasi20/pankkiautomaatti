@@ -5,6 +5,7 @@ import customerRouter from './routes/customerRouter.js';
 import accountsRouter from './routes/accountsRouter.js';
 import cardRouter from './routes/cardRouter.js';
 import transactionRouter from './routes/transactionRouter.js';
+import loginRouter from './routes/login.js';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -47,6 +48,7 @@ app.use('/customer', customerRouter);
 app.use('/accounts', accountsRouter);
 app.use('/card', cardRouter);
 app.use('/transaction', transactionRouter);
+app.use('/login', loginRouter);
 
 // Default error handler
 app.use((err, req, res, next) => {
