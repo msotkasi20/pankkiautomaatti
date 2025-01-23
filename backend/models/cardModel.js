@@ -1,3 +1,5 @@
+import bcrypt from 'bcryptjs';
+
 export async function getAllCards(pool) {
     try{
         const [rows] = await pool.query('SELECT * FROM card');
@@ -20,14 +22,45 @@ export async function getCardById(pool, id) {
     }
 }
 
-export async function createCard(pool, card){
-    try{
-        const [rows] = await pool.query('INSERT INTO card (idcard, type, cardpin) VALUES (?, ?, ?)', [card.idcard, card.type, card.cardpin]);
-        return rows; // Palauttaa luodun kortin
-    } catch (error){
-        throw new Error(`Database error: ${error.message}`);
+export async function encryptCardPin(cardpin) {
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPin = await bcrypt.hash(cardpin, salt);
+      return hashedPin;
+    } catch (error) {
+      throw new Error(`Encryption error: ${error.message}`);
     }
-}
+  }
+
+    // Luodaan kortti tietokantaan, PIN-koodin kryptaus
+    
+    export async function createCard(pool, card) {
+        try {
+          console.log("Received card object:", card); // Loggaa kortin tiedot
+      
+          if (!card.cardpin) {
+            throw new Error('PIN is missing');
+          }
+      
+          const pinAsString = String(card.cardpin);
+      
+          // Kryptataan PIN ennen tallentamista
+          const hashedPin = await encryptCardPin(pinAsString);
+      
+          // Lisää uusi kortti ilman id:tä
+          const [rows] = await pool.query(
+            'INSERT INTO card (type, cardpin) VALUES (?, ?)',
+            [card.type, hashedPin]
+          );
+      
+          // Palautetaan luodun kortin tiedot
+          return { idcard: rows.insertId, type: card.type };
+        } catch (error) {
+          throw new Error(`Database error: ${error.message}`);
+        }
+      }
+      
+      
 
 export async function updateCard(pool, id, card){
     try {
