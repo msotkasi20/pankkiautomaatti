@@ -17,6 +17,9 @@ public:
 
 private:
     Ui::CorD *ui;
+
+private slots:
+    void showTime();
 };
 
 #endif // CORD_H

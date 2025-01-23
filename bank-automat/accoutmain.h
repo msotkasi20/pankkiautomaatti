@@ -17,6 +17,9 @@ public:
 
 private:
     Ui::accoutmain *ui;
+
+private slots:
+    void showTime();
 };
 
 #endif // ACCOUTMAIN_H
