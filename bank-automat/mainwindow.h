@@ -19,5 +19,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+private slots:
+    void showTime();
 };
 #endif // MAINWINDOW_H
