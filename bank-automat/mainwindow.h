@@ -22,5 +22,6 @@ private:
 
 private slots:
     void showTime();
+    void on_loginBtn_clicked();
 };
 #endif // MAINWINDOW_H
