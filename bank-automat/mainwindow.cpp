@@ -7,6 +7,7 @@
 #include <QNetworkReply>
 #include <QJsonObject>
 #include <QJsonDocument>
+#include <QInputDialog>
 #include <QMessageBox>
 
 
@@ -63,7 +64,7 @@ void MainWindow::on_loginBtn_clicked()
     QNetworkReply *reply = manager->post(request, jsonDoc.toJson());
 
     // Connect to the reply signal for handling response
-    connect(reply, &QNetworkReply::finished, this, [reply, this]() {
+    connect(reply, &QNetworkReply::finished, this, [reply, this, idcard]() {
         if (reply->error() == QNetworkReply::NoError) {
             // Parse the JSON response
             QJsonDocument responseDoc = QJsonDocument::fromJson(reply->readAll());
@@ -72,16 +73,65 @@ void MainWindow::on_loginBtn_clicked()
             bool success = responseObj.value("success").toBool();
             if (success) {
                 QString token = responseObj.value("token").toString();
-                QMessageBox::information(this, "Login Success", "Authentication succeeded.");
-                // Save token or proceed to the main application
+                qDebug() << "Login successful. Token: " << token;
+
+                QNetworkAccessManager *managerForCard = new QNetworkAccessManager(this);
+                QUrl cardUrl(QString("http://localhost:3000/card/%1").arg(idcard));
+                QNetworkRequest cardRequest(cardUrl);
+                cardRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+                QNetworkReply *cardReply = managerForCard->get(cardRequest);
+
+                connect(cardReply, &QNetworkReply::finished, this, [cardReply, this]() {
+                    if (cardReply->error() == QNetworkReply::NoError){
+                    QByteArray cardResponse = cardReply->readAll();
+                    QJsonDocument cardResponseDoc = QJsonDocument::fromJson(cardResponse);
+                    QJsonObject cardResponseObj = cardResponseDoc.object();
+
+                    QJsonObject dataObj = cardResponseObj.value("data").toObject();
+                    QString cardType = dataObj.value("type").toString();
+
+                    //QString cardType = cardResponseObj.value("type").toString();
+                    qDebug() << "Card Type: " << cardType;
+
+                    if (!cardType.isEmpty()){
+
+                    } else {
+                        qDebug() << "Card type not found in the response.";
+                    }
+
+
+
+                if (cardType == "dual") {
+                    QStringList options = { "Credit", "Debit" };
+                    bool ok = false;
+                    QString choice = QInputDialog::getItem(this, "Select Card Type", "Choose Credit or Debit", options, 0, false, &ok);
+
+                    if (ok && !choice.isEmpty()) {
+                        qDebug() << "User selected card type: " << choice;
+
+                    } else {
+                    qDebug() << "No card type selected.";
+
+                    }
+
+                } else {
+                    qDebug() << "Card type: " << cardType;
+                }
+                } else {
+                    QMessageBox::critical(this, "Card Data Error", "Failed to retrieve card data: " + cardReply->errorString());
+                }
+                cardReply->deleteLater();
+                });
             } else {
-                QString message = responseObj.value("message").toString();
-                QMessageBox::warning(this, "Login Failed", message);
+                 QMessageBox::warning(this, "Login Failed", responseObj.value("message").toString());
             }
         } else {
-            QMessageBox::critical(this, "Network Error", reply->errorString());
+            QMessageBox::critical(this, "Network Error", "Login request failed: " + reply->errorString());
         }
         reply->deleteLater();
+
     });
+
 }
 

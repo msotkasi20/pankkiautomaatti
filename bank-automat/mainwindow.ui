@@ -93,7 +93,7 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>290</x>
       <y>260</y>
       <width>121</width>
       <height>20</height>
@@ -105,7 +105,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Kortin numero</string>
+     <string>Pin koodi</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
@@ -123,7 +123,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Käyttäjätunnus</string>
+     <string>Kortin numero</string>
     </property>
    </widget>
    <widget class="QLabel" name="digitalClock">
