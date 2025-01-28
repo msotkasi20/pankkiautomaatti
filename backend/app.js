@@ -3,6 +3,7 @@ import mysql from 'mysql2/promise';
 import logger from 'morgan';
 import customerRouter from './routes/customerRouter.js';
 import accountsRouter from './routes/accountsRouter.js';
+import accounts_cardsRouter from './routes/accounts_cardsRouter.js';
 import cardRouter from './routes/cardRouter.js';
 import transactionRouter from './routes/transactionRouter.js';
 import loginRouter from './routes/login.js';
@@ -49,6 +50,7 @@ app.use('/accounts', accountsRouter);
 app.use('/card', cardRouter);
 app.use('/transaction', transactionRouter);
 app.use('/login', loginRouter);
+app.use('/accounts_cards', accounts_cardsRouter);
 
 // Default error handler
 app.use((err, req, res, next) => {

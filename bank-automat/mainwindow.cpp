@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "debitwindow.h"
+#include "creditwindow.h"
 #include <QTimer>
 #include <QDateTime>
 #include <QNetworkAccessManager>
@@ -82,7 +84,7 @@ void MainWindow::on_loginBtn_clicked()
 
                 QNetworkReply *cardReply = managerForCard->get(cardRequest);
 
-                connect(cardReply, &QNetworkReply::finished, this, [cardReply, this]() {
+                connect(cardReply, &QNetworkReply::finished, this, [cardReply, this, idcard]() {
                     if (cardReply->error() == QNetworkReply::NoError){
                     QByteArray cardResponse = cardReply->readAll();
                     QJsonDocument cardResponseDoc = QJsonDocument::fromJson(cardResponse);
@@ -91,17 +93,18 @@ void MainWindow::on_loginBtn_clicked()
                     QJsonObject dataObj = cardResponseObj.value("data").toObject();
                     QString cardType = dataObj.value("type").toString();
 
-                    //QString cardType = cardResponseObj.value("type").toString();
                     qDebug() << "Card Type: " << cardType;
 
-                    if (!cardType.isEmpty()){
-
-                    } else {
-                        qDebug() << "Card type not found in the response.";
+                    //Valitaan ikkuna joka aukeaa.
+                    if (cardType == "credit") {
+                        creditwindow *creditWindow = new creditwindow(idcard, this);
+                        creditWindow->show();
+                    } else if (cardType == "debit") {
+                        debitwindow *debitWindow = new debitwindow(idcard, this);
+                        debitWindow->show();
                     }
 
-
-
+                //Kysytään kortti tyyppi kun kortti on dual
                 if (cardType == "dual") {
                     QStringList options = { "Credit", "Debit" };
                     bool ok = false;
@@ -109,6 +112,13 @@ void MainWindow::on_loginBtn_clicked()
 
                     if (ok && !choice.isEmpty()) {
                         qDebug() << "User selected card type: " << choice;
+                        if (choice == "Credit") {
+                            creditwindow *creditWindow = new creditwindow(idcard, this);
+                            creditWindow->show();
+                        } else if (choice == "Debit"){
+                            debitwindow *debitWindow = new debitwindow(idcard, this);
+                            debitWindow->show();
+                        }
 
                     } else {
                     qDebug() << "No card type selected.";

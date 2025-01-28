@@ -12,18 +12,21 @@ CONFIG += c++17
 
 SOURCES += \
     accoutmain.cpp \
-    cord.cpp \
+    creditwindow.cpp \
+    debitwindow.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     accoutmain.h \
-    cord.h \
+    creditwindow.h \
+    debitwindow.h \
     mainwindow.h
 
 FORMS += \
     accoutmain.ui \
-    cord.ui \
+    creditwindow.ui \
+    debitwindow.ui \
     mainwindow.ui
 
 # Default rules for deployment.

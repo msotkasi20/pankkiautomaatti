@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CorD</class>
- <widget class="QDialog" name="CorD">
+ <class>creditwindow</class>
+ <widget class="QDialog" name="creditwindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,11 +16,33 @@
   <property name="styleSheet">
    <string notr="true">background-image: url(:/res/background.jpg);</string>
   </property>
+  <widget class="QLabel" name="digitalClock">
+   <property name="geometry">
+    <rect>
+     <x>630</x>
+     <y>490</y>
+     <width>221</width>
+     <height>111</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Ebrima</family>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(255, 255, 255);
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 255));</string>
+   </property>
+   <property name="text">
+    <string>Clock</string>
+   </property>
+  </widget>
   <widget class="QLabel" name="dateTime">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>200</y>
+     <x>630</x>
+     <y>490</y>
      <width>61</width>
      <height>51</height>
     </rect>
@@ -32,24 +54,6 @@
    </property>
    <property name="text">
     <string>Date</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="digitalClock">
-   <property name="geometry">
-    <rect>
-     <x>270</x>
-     <y>250</y>
-     <width>221</width>
-     <height>51</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Ebrima</family>
-    </font>
-   </property>
-   <property name="text">
-    <string>Clock</string>
    </property>
   </widget>
  </widget>

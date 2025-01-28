@@ -1,13 +1,14 @@
-#include "cord.h"
-#include "ui_cord.h"
+#include "creditwindow.h"
+#include "ui_creditwindow.h"
 #include <QTimer>
 #include <QDateTime>
 
-
-CorD::CorD(QWidget *parent)
+creditwindow::creditwindow(const QString &idcard, QWidget *parent)
     : QDialog(parent)
-    , ui(new Ui::CorD)
-{
+    , ui(new Ui::creditwindow)
+    , idcard(idcard){
+    qDebug() << "creditwindow created with idcard: " << idcard;
+
     ui->setupUi(this);
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
@@ -18,12 +19,12 @@ CorD::CorD(QWidget *parent)
     ui->dateTime->setText(datetimetext);
 }
 
-CorD::~CorD()
+creditwindow::~creditwindow()
 {
     delete ui;
 }
 
-void CorD::showTime()
+void creditwindow::showTime()
 {
     QTime time = QTime::currentTime();
     QString time_text = time.toString("hh : mm : ss");
