@@ -15,10 +15,12 @@ class debitwindow : public QDialog
 public:
     explicit debitwindow(const QString &idcard, QWidget *parent = nullptr);
     ~debitwindow();
+    void updatebalancedisplay();
 
 private:
     Ui::debitwindow *ui;
     QString idcard;
+    double balance;
 
     void fetchDebitAccount();
     QNetworkAccessManager *networkManager;
