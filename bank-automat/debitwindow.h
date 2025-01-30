@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <QNetworkAccessManager>
+#include <QJsonArray>
+
 
 namespace Ui {
 class debitwindow;
