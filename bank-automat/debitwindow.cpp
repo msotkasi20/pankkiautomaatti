@@ -42,7 +42,7 @@ debitwindow::~debitwindow()
 void debitwindow::fetchDebitAccount()
 {
  //Haetaan debit-tili
-    QUrl url(QString("http://localhost:3000/accounts_cards/%1/debit").arg(idcard));
+    QUrl url(QString("http://localhost:3000/accounts_cards/by-card-and-type?idcard=%1&type=debit").arg(idcard));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
@@ -62,8 +62,8 @@ void debitwindow::fetchDebitAccount()
                 QString accountId = accountData.value("idaccounts").toString();
                 double balance = accountData.value("balance").toDouble();
 
-                qDebug() << "Debit Account ID: " << accountId;
-                qDebug() << "Balance: " << balance;
+                qDebug() << "Full JSON response: " << jsonDoc.toJson();
+
             } else {
                 QMessageBox::warning(this, "Error", jsonObj.value("error").toString());
             }

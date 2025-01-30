@@ -13,8 +13,7 @@ export async function getAllAccountsCards(pool) {
         SELECT a.*
         FROM accounts a
         JOIN accounts_cards ac ON a.idaccounts = ac.idaccounts
-        JOIN card c ON ac.idcard = c.idcard
-        WHERE c.idcard = ? AND a.type = ?
+        WHERE ac.idcard = ? AND a.type = ?
       `;
       const [rows] = await pool.query(query, [idcard, type]);
       return rows; // Return the accounts as an array
