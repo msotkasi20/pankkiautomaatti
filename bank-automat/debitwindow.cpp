@@ -19,7 +19,6 @@ debitwindow::debitwindow(const QString &idcard, QWidget *parent)
 {
     qDebug() << "debitwindow created with idcard: " << idcard;
 
-
     ui->setupUi(this);
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
@@ -37,6 +36,12 @@ debitwindow::debitwindow(const QString &idcard, QWidget *parent)
 debitwindow::~debitwindow()
 {
     delete ui;
+}
+
+void debitwindow::updatebalancedisplay()
+{
+    // päivitä saldo käyttöliittymään
+        ui->debitbalance->setText(QString::number(balance,'f',2));
 }
 
 void debitwindow::fetchDebitAccount()
@@ -58,9 +63,12 @@ void debitwindow::fetchDebitAccount()
 
             bool success = jsonObj.value("success").toBool();
             if(success) {
+                // luodaan muuttujat, joihin tallennetaan json vastauksen data
                 QJsonObject accountData = jsonObj.value("data").toObject();
                 QString accountId = accountData.value("idaccounts").toString();
-                double balance = accountData.value("balance").toDouble();
+                //päivitetään luokan muuttuja balance
+                this->balance = accountData.value("balance").toDouble();
+                updatebalancedisplay();
 
                 qDebug() << "Full JSON response: " << jsonDoc.toJson();
 
@@ -72,7 +80,6 @@ void debitwindow::fetchDebitAccount()
         }
         reply->deleteLater();
     });
-
 }
 
 void debitwindow::showTime()
@@ -81,5 +88,4 @@ void debitwindow::showTime()
     QString time_text = time.toString("hh : mm : ss");
     ui->digitalClock->setText(time_text);
 }
-
 
