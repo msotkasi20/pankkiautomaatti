@@ -57,20 +57,37 @@ void debitwindow::fetchDebitAccount()
     connect(reply, &QNetworkReply::finished, this, [reply, this](){
         if (reply->error() == QNetworkReply::NoError){
             //Parse the JSON response
-            QByteArray responseData = reply ->readAll();
+            QByteArray responseData = reply->readAll();
             QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
             QJsonObject jsonObj = jsonDoc.object();
 
-            bool success = jsonObj.value("success").toBool();
-            if(success) {
-                // luodaan muuttujat, joihin tallennetaan json vastauksen data
-                QJsonObject accountData = jsonObj.value("data").toObject();
-                QString accountId = accountData.value("idaccounts").toString();
-                //päivitetään luokan muuttuja balance
-                this->balance = accountData.value("balance").toDouble();
-                updatebalancedisplay();
+            qDebug() << "Full JSON response: " << jsonDoc.toJson(QJsonDocument::Indented);
 
-                qDebug() << "Full JSON response: " << jsonDoc.toJson();
+            bool success = jsonObj.value("success").toBool();
+            if (success) {
+                // Tarkistetaan että "data" on array
+                if (!jsonObj.contains("data") || !jsonObj["data"].isArray()) {
+                    qDebug() << "Error: 'data' field is missing or is not an array.";
+                    return;
+                }
+
+                QJsonArray dataArray = jsonObj["data"].toArray();
+                if (dataArray.isEmpty()) {
+                    qDebug() << "Error: 'data' array is empty.";
+                    return;
+                }
+
+                // Haetaan ensimmäinen objekti taulukosta
+                QJsonObject accountData = dataArray.first().toObject();
+
+                // Päivitetään balance
+                this->balance = accountData.value("balance").toDouble();
+
+                // Debug-tulosteet
+                qDebug() << "Fetched balance: " << balance;
+
+                // Päivitetään UI
+                updatebalancedisplay();
 
             } else {
                 QMessageBox::warning(this, "Error", jsonObj.value("error").toString());
