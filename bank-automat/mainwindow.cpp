@@ -15,12 +15,14 @@
 
 
 
+
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    keyboard = nullptr;
+    virtualKeyboard = nullptr;
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
     timer -> start();
@@ -29,19 +31,35 @@ MainWindow::MainWindow(QWidget *parent)
     QString datetimetext=dateTime.toString();
     ui->dateTime->setText(datetimetext);
 
-    connect(ui->username, &QLineEdit::selectionChanged, this, [=](){
-        showKeyboard(ui->username);
-    });
-
-    connect(ui->cardpin, &QLineEdit::selectionChanged, this, [=](){
-        showKeyboard(ui->cardpin);
-    });
+    ui->username->installEventFilter(this);
+    ui->cardpin->installEventFilter(this);
 
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::FocusIn) {
+        QLineEdit *lineEdit = qobject_cast<QLineEdit *>(obj);
+        if (lineEdit) {
+            showKeyboard(lineEdit);
+            return true;
+        }
+    }
+
+    // if(event->type() == QEvent::MouseButtonPress) {
+    //     if(virtualKeyboard && !virtualKeyboard->geometry().contains(static_cast<QMouseEvent *>(event)->globalPos())) {
+    //         virtualKeyboard->close();
+    //         virtualKeyboard->deleteLater();
+    //         virtualKeyboard = nullptr;
+    //     }
+    // }
+
+    return QMainWindow::eventFilter(obj, event);
 }
 
 void MainWindow::showTime()
@@ -158,14 +176,19 @@ void MainWindow::on_loginBtn_clicked()
 
 void MainWindow::showKeyboard(QLineEdit *targetField)
 {
-    if (keyboard) {
-        keyboard ->close();
-        delete keyboard;
+    if (virtualKeyboard) {
+        virtualKeyboard->close();
+        virtualKeyboard->deleteLater();
+        virtualKeyboard = nullptr;
     }
+    targetField->setFocus();
+    QCoreApplication::processEvents();
 
-    keyboard = new keyboard(targetField, this);
-    keyboard -> move(300, 400);
-    keyboard -> show();
+    virtualKeyboard = new keyboard(targetField, this);
+    virtualKeyboard->move(550, 195);
+    virtualKeyboard->show();
+    virtualKeyboard->raise();
+    virtualKeyboard->activateWindow();
 }
 
 
