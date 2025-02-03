@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "debitwindow.h"
 #include "creditwindow.h"
+#include "keyboard.h"
 #include <QTimer>
 #include <QDateTime>
 #include <QNetworkAccessManager>
@@ -19,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    keyboard = nullptr;
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
     timer -> start();
@@ -26,6 +28,15 @@ MainWindow::MainWindow(QWidget *parent)
     QDateTime dateTime = QDateTime::currentDateTime();
     QString datetimetext=dateTime.toString();
     ui->dateTime->setText(datetimetext);
+
+    connect(ui->username, &QLineEdit::selectionChanged, this, [=](){
+        showKeyboard(ui->username);
+    });
+
+    connect(ui->cardpin, &QLineEdit::selectionChanged, this, [=](){
+        showKeyboard(ui->cardpin);
+    });
+
 }
 
 MainWindow::~MainWindow()
@@ -86,55 +97,55 @@ void MainWindow::on_loginBtn_clicked()
 
                 connect(cardReply, &QNetworkReply::finished, this, [cardReply, this, idcard]() {
                     if (cardReply->error() == QNetworkReply::NoError){
-                    QByteArray cardResponse = cardReply->readAll();
-                    QJsonDocument cardResponseDoc = QJsonDocument::fromJson(cardResponse);
-                    QJsonObject cardResponseObj = cardResponseDoc.object();
+                        QByteArray cardResponse = cardReply->readAll();
+                        QJsonDocument cardResponseDoc = QJsonDocument::fromJson(cardResponse);
+                        QJsonObject cardResponseObj = cardResponseDoc.object();
 
-                    QJsonObject dataObj = cardResponseObj.value("data").toObject();
-                    QString cardType = dataObj.value("type").toString();
+                        QJsonObject dataObj = cardResponseObj.value("data").toObject();
+                        QString cardType = dataObj.value("type").toString();
 
-                    qDebug() << "Card Type: " << cardType;
+                        qDebug() << "Card Type: " << cardType;
 
-                    //Valitaan ikkuna joka aukeaa.
-                    if (cardType == "credit") {
-                        creditwindow *creditWindow = new creditwindow(idcard, this);
-                        creditWindow->show();
-                    } else if (cardType == "debit") {
-                        debitwindow *debitWindow = new debitwindow(idcard, this);
-                        debitWindow->show();
-                    }
-
-                //Kysytään kortti tyyppi kun kortti on dual
-                if (cardType == "dual") {
-                    QStringList options = { "Credit", "Debit" };
-                    bool ok = false;
-                    QString choice = QInputDialog::getItem(this, "Select Card Type", "Choose Credit or Debit", options, 0, false, &ok);
-
-                    if (ok && !choice.isEmpty()) {
-                        qDebug() << "User selected card type: " << choice;
-                        if (choice == "Credit") {
+                        //Valitaan ikkuna joka aukeaa.
+                        if (cardType == "credit") {
                             creditwindow *creditWindow = new creditwindow(idcard, this);
                             creditWindow->show();
-                        } else if (choice == "Debit"){
+                        } else if (cardType == "debit") {
                             debitwindow *debitWindow = new debitwindow(idcard, this);
                             debitWindow->show();
                         }
 
+                        //Kysytään kortti tyyppi kun kortti on dual
+                        if (cardType == "dual") {
+                            QStringList options = { "Credit", "Debit" };
+                            bool ok = false;
+                            QString choice = QInputDialog::getItem(this, "Select Card Type", "Choose Credit or Debit", options, 0, false, &ok);
+
+                            if (ok && !choice.isEmpty()) {
+                                qDebug() << "User selected card type: " << choice;
+                                if (choice == "Credit") {
+                                    creditwindow *creditWindow = new creditwindow(idcard, this);
+                                    creditWindow->show();
+                                } else if (choice == "Debit"){
+                                    debitwindow *debitWindow = new debitwindow(idcard, this);
+                                    debitWindow->show();
+                                }
+
+                            } else {
+                                qDebug() << "No card type selected.";
+
+                            }
+
+                        } else {
+                            qDebug() << "Card type: " << cardType;
+                        }
                     } else {
-                    qDebug() << "No card type selected.";
-
+                        QMessageBox::critical(this, "Card Data Error", "Failed to retrieve card data: " + cardReply->errorString());
                     }
-
-                } else {
-                    qDebug() << "Card type: " << cardType;
-                }
-                } else {
-                    QMessageBox::critical(this, "Card Data Error", "Failed to retrieve card data: " + cardReply->errorString());
-                }
-                cardReply->deleteLater();
+                    cardReply->deleteLater();
                 });
             } else {
-                 QMessageBox::warning(this, "Login Failed", responseObj.value("message").toString());
+                QMessageBox::warning(this, "Login Failed", responseObj.value("message").toString());
             }
         } else {
             QMessageBox::critical(this, "Network Error", "Login request failed: " + reply->errorString());
@@ -144,4 +155,17 @@ void MainWindow::on_loginBtn_clicked()
     });
 
 }
+
+void MainWindow::showKeyboard(QLineEdit *targetField)
+{
+    if (keyboard) {
+        keyboard ->close();
+        delete keyboard;
+    }
+
+    keyboard = new keyboard(targetField, this);
+    keyboard -> move(300, 400);
+    keyboard -> show();
+}
+
 

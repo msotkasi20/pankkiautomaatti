@@ -14,6 +14,7 @@ SOURCES += \
     accoutmain.cpp \
     creditwindow.cpp \
     debitwindow.cpp \
+    keyboard.cpp \
     main.cpp \
     mainwindow.cpp
 
@@ -21,6 +22,7 @@ HEADERS += \
     accoutmain.h \
     creditwindow.h \
     debitwindow.h \
+    keyboard.h \
     mainwindow.h
 
 FORMS += \

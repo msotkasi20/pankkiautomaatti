@@ -2,6 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "keyboard.h"
+
+
+class keyboard;
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -17,11 +21,14 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    keyboard *keyboard;
+
 private:
     Ui::MainWindow *ui;
 
 private slots:
     void showTime();
     void on_loginBtn_clicked();
+    void showKeyboard(QLineEdit *targetField);
 };
 #endif // MAINWINDOW_H
