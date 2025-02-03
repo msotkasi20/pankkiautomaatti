@@ -36,13 +36,13 @@ router.get('/:id', async (req, res, next) => {
 //luo uuden transaction
 router.post('/', async (req, res) => {
 
-  const {action, actiontimestamp, amount, idaccounts } = req.body;
+  const {action, amount, idaccounts } = req.body;
 
   //tarkistetaan, että kaikki vaaditut kentät ovat läsnä
-  if (!action || !actiontimestamp || !amount || !idaccounts) {
+  if (!action || !amount || !idaccounts) {
     return res.status(400).json({
       success: false,
-      message: 'Missing required fields: action, actiontimestamp, amount, idaccounts'
+      message: 'Missing required fields: action, amount, idaccounts'
     });
   }
   try {
