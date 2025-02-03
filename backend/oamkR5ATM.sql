@@ -58,7 +58,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `oamkR5ATM`.`transaction` (
   `idtransaction` INT NOT NULL AUTO_INCREMENT,
   `action` VARCHAR(45) NULL,
-  `actiontimestamp` TIMESTAMP NULL,
+  `actiontimestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `amount` DOUBLE NULL,
   `idaccounts` INT NOT NULL,
   PRIMARY KEY (`idtransaction`),
