@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QEvent>
 #include "keyboard.h"
 
 
@@ -21,7 +22,10 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    keyboard *keyboard;
+    keyboard *virtualKeyboard;
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
     Ui::MainWindow *ui;
