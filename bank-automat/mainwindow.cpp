@@ -185,10 +185,9 @@ void MainWindow::showKeyboard(QLineEdit *targetField)
     QCoreApplication::processEvents();
 
     virtualKeyboard = new keyboard(targetField, this);
-    virtualKeyboard->move(550, 195);
+    virtualKeyboard->move(550, 195); //Asettaa näppäimistölle paikan näytöllä
     virtualKeyboard->show();
     virtualKeyboard->raise();
-    virtualKeyboard->activateWindow();
 }
 
 
