@@ -23,7 +23,7 @@ export async function getAlltransaction(pool) {
   export async function addTransaction(pool, transactionData) {
     try {
       const [result] = await pool.query(
-        'INSERT INTO transaction (action,, amount, idaccounts) VALUES (?, ?, ?)',
+        'INSERT INTO transaction (action, amount, idaccounts) VALUES (?, ?, ?)',
         [transactionData.action, transactionData.amount, transactionData.idaccounts]
       );
       return { id: result.insertId, ...transactionData };
