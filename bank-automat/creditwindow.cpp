@@ -20,6 +20,7 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
     qDebug() << "creditwindow created with idcard: " << idcard;
 
     ui->setupUi(this);
+    virtualKeyboard = nullptr;
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
     timer -> start();
@@ -28,13 +29,20 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
     QString datetimetext=dateTime.toString();
     ui->dateTime->setText(datetimetext);
 
-    inactivityTimer->setInterval(10000); // 30 sekunttia
+    inactivityTimer->setInterval(30000); // 30 sekunttia
     connect(inactivityTimer, &QTimer::timeout, this, &creditwindow::closeDueToInactivity);
     inactivityTimer->start();
 
     this->installEventFilter(this);
 
     fetchCreditAccount();
+
+    connect(ui->nostoBtn, &QPushButton::clicked, this, &creditwindow::showPage1);
+    connect(ui->tilitapahtumatBtn, &QPushButton::clicked, this, &creditwindow::showPage2);
+    connect(ui->creditlimitBtn, &QPushButton::clicked, this, &creditwindow::showPage3);
+    connect(ui->logoutBtn, &QPushButton::clicked, this, &creditwindow::logOut);
+
+    ui->muuBtn->installEventFilter(this);
 }
 
 creditwindow::~creditwindow()
@@ -111,12 +119,23 @@ void creditwindow::closeDueToInactivity()
     close();
 }
 
+
 bool creditwindow::eventFilter(QObject *obj, QEvent *event)
 {
-    if(event->type() == QEvent::MouseMove || event->type() == QEvent::KeyPress) {
-        resetInactivityTimer();
+    if(event->type() == QEvent::MouseMove || event->type() == QEvent::KeyPress) { //Jos liikutetaan hiirtä tai painetaan näppäintä ajastin resettaa.
+        resetInactivityTimer(); //Kutsutaan funktiota resetInactivityTimer
     }
+
+    // if (ui->muuBtn && event->type() == QEvent::MouseButtonPress)
+    // {
+    //     virtualKeyboard->show();
+    //     ui->muuSumma->setFocus();
+    //     return true;
+
+    // }
     return QDialog::eventFilter(obj, event);
+
+
 }
 
 void creditwindow::showTime()
@@ -124,6 +143,28 @@ void creditwindow::showTime()
     QTime time = QTime::currentTime();
     QString time_text = time.toString("hh : mm : ss");
     ui->digitalClock->setText(time_text);
+}
+
+void creditwindow::showPage1()
+{
+    ui->stackedWidget->setCurrentIndex(0); //Näyttää "Nosto" sivun
+}
+
+void creditwindow::showPage2()
+{
+    ui->stackedWidget->setCurrentIndex(1);
+}
+
+void creditwindow::showPage3()
+{
+    ui->stackedWidget->setCurrentIndex(2);
+}
+
+void creditwindow::logOut()
+{
+    inactivityTimer->stop();
+    qDebug() << "logoutBtn clicked.";
+    close();
 }
 
 
