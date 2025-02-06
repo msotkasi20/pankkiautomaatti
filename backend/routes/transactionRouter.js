@@ -88,13 +88,20 @@ router.put('/:id', async (req, res) => {
       });
     }
 
-    //Päivitetään uusi saldo tilille
+   // Lasketaan uusi saldo
+   let newBalance = account.balance - amount;
 
-    let newBalance = account.balance;
-  
-    newBalance -= amount;
+   // Muodostetaan uusi tilitieto päivittämistä varten
+   const updatedAccountData = {
+     type: account.type,
+     balance: newBalance, // Päivitetty saldo
+     creditlimit: account.creditlimit,
+     idcustomer: account.idcustomer
+   };
 
-    await updateAccounts(req.pool, idaccounts, newBalance);
+   // Päivitetään koko tili, mutta vain saldo on muuttunut
+   await updateAccounts(req.pool, idaccounts, updatedAccountData);
+
 
     // Päivitetään nosto transactioniin
     const updatedTransaction = await updateTransaction(req.pool, req.params.id, req.body);
