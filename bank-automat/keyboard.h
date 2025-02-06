@@ -11,6 +11,7 @@ class keyboard : public QWidget
     Q_OBJECT
 public:
     explicit keyboard(QLineEdit *targetField, QWidget *parent = nullptr);
+    void setTargetField(QLineEdit *targetField);
 
 signals:
 

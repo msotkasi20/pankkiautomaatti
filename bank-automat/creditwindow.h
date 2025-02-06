@@ -30,6 +30,7 @@ private:
     QTimer *inactivityTimer;
     void resetInactivityTimer();
     void closeDueToInactivity();
+    keyboard *virtualKeyboard;
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event) override;
