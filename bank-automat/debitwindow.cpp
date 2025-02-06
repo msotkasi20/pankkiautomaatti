@@ -16,6 +16,7 @@ debitwindow::debitwindow(const QString &idcard, QWidget *parent)
     , ui(new Ui::debitwindow)
     , idcard(idcard)
     , networkManager(new QNetworkAccessManager(this))
+    , inactivityTimer(new QTimer(this))
 {
     qDebug() << "debitwindow created with idcard: " << idcard;
 
@@ -27,6 +28,12 @@ debitwindow::debitwindow(const QString &idcard, QWidget *parent)
     QDateTime dateTime = QDateTime::currentDateTime();
     QString datetimetext=dateTime.toString();
     ui->dateTime->setText(datetimetext);
+
+    inactivityTimer->setInterval(30000); // 30 sekunttia
+    connect(inactivityTimer, &QTimer::timeout, this, &debitwindow::closeDueToInactivity);
+    inactivityTimer->start();
+
+    this->installEventFilter(this);
 
     fetchDebitAccount();
 
@@ -97,6 +104,25 @@ void debitwindow::fetchDebitAccount()
         }
         reply->deleteLater();
     });
+}
+
+void debitwindow::resetInactivityTimer()
+{
+    inactivityTimer->start(); //Restarttaa ajastimen(30 sek)
+}
+
+void debitwindow::closeDueToInactivity()
+{
+    qDebug() << "Closing due to inactivity.";
+    close();
+}
+
+bool debitwindow::eventFilter(QObject *obj, QEvent *event)
+{
+    if(event->type() == QEvent::MouseMove || event->type() == QEvent::KeyPress) { //Jos liikutetaan hiirtä tai painetaan näppäintä ajastin resettaa.
+        resetInactivityTimer(); //Kutsutaan funktiota resetInactivityTimer
+    }
+    return QDialog::eventFilter(obj, event);
 }
 
 void debitwindow::showTime()

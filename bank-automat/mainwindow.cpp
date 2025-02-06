@@ -51,14 +51,6 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         }
     }
 
-    // if(event->type() == QEvent::MouseButtonPress) {
-    //     if(virtualKeyboard && !virtualKeyboard->geometry().contains(static_cast<QMouseEvent *>(event)->globalPos())) {
-    //         virtualKeyboard->close();
-    //         virtualKeyboard->deleteLater();
-    //         virtualKeyboard = nullptr;
-    //     }
-    // }
-
     return QMainWindow::eventFilter(obj, event);
 }
 

@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QNetworkAccessManager>
 #include <QJsonArray>
+#include <QTimer>
 
 
 namespace Ui {
@@ -26,6 +27,13 @@ private:
 
     void fetchDebitAccount();
     QNetworkAccessManager *networkManager;
+
+    QTimer *inactivityTimer;
+    void resetInactivityTimer();
+    void closeDueToInactivity();
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private slots:
     void showTime();

@@ -22,6 +22,7 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
 
     ui->setupUi(this);
 
+
     virtualKeyboard = new keyboard(nullptr, this);
     virtualKeyboard->move(440,200);
     virtualKeyboard->show();
@@ -48,12 +49,10 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
     connect(ui->logoutBtn, &QPushButton::clicked, this, &creditwindow::logOut);
 
     ui->muuBtn->installEventFilter(this);
+
     ui->muuSumma->installEventFilter(this);
 
-    foreach(QObject *child, this->children()){
-        child->installEventFilter(this);
-    }
-}
+
 
 creditwindow::~creditwindow()
 {
@@ -133,6 +132,7 @@ void creditwindow::closeDueToInactivity()
 
 bool creditwindow::eventFilter(QObject *obj, QEvent *event)
 {
+
     if(event->type() == QEvent::MouseMove || event->type() == QEvent::KeyPress) {        //Jos liikutetaan hiirtä tai painetaan näppäintä ajastin resettaa.
         resetInactivityTimer(); //Kutsutaan funktiota resetInactivityTimer
     }
@@ -142,7 +142,16 @@ bool creditwindow::eventFilter(QObject *obj, QEvent *event)
         ui->muuSumma->setFocus();
         virtualKeyboard->setTargetField(ui->muuSumma);
         return true;
+
     }
+
+    // if (ui->muuBtn && event->type() == QEvent::MouseButtonPress)
+    // {
+    //     virtualKeyboard->show();
+    //     ui->muuSumma->setFocus();
+    //     return true;
+
+    // }
     return QDialog::eventFilter(obj, event);
 
 
@@ -158,19 +167,27 @@ void creditwindow::showTime()
 void creditwindow::showPage1()
 {
     ui->stackedWidget->setCurrentIndex(0); //Näyttää "Nosto" sivun
+
     virtualKeyboard->show();
+
+
 }
 
 void creditwindow::showPage2()
 {
     ui->stackedWidget->setCurrentIndex(1);
+
     virtualKeyboard->close();
+
 }
 
 void creditwindow::showPage3()
 {
     ui->stackedWidget->setCurrentIndex(2);
+
     virtualKeyboard->close();
+
+
 }
 
 void creditwindow::logOut()
