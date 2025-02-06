@@ -64,15 +64,5 @@ export async function getAlltransaction(pool) {
     }
   }
 
-  export async function getAccountById(pool, idaccounts) {
-    try {
-      const [rows] = await pool.query('SELECT * FROM accounts WHERE idaccounts = ?', [idaccounts]);
-      if (rows.length === 0) {
-        throw new Error('Account not found');
-      }
-      return rows[0]; // Palauttaa yksittäisen tilin tiedot
-    } catch (error) {
-      throw new Error(`Database error: ${error.message}`);
-    }
-  }
+
   

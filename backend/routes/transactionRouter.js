@@ -6,8 +6,11 @@ import {
   addTransaction,
   updateTransaction,
   deleteTransaction,
-  getAccountById
  } from '../models/transactionModel.js';
+ import {
+  getAccountsById,
+  updateAccounts
+ } from '../models/accountsModel.js';
 
 const router = express.Router();
 
@@ -69,7 +72,7 @@ router.put('/:id', async (req, res) => {
 
   try {
     // Haetaan tilin tiedot tarkistusta varten
-    const account = await getAccountById(req.pool, idaccounts);
+    const account = await getAccountsById(req.pool, idaccounts);
     if (!account) {
       return res.status(404).json({
         success: false,
@@ -84,6 +87,14 @@ router.put('/:id', async (req, res) => {
         message: 'Insufficient balance for this withdrawal',
       });
     }
+
+    //Päivitetään uusi saldo tilille
+
+    let newBalance = account.balance;
+  
+    newBalance -= amount;
+
+    await updateAccounts(req.pool, idaccounts, newBalance);
 
     // Päivitetään nosto transactioniin
     const updatedTransaction = await updateTransaction(req.pool, req.params.id, req.body);
