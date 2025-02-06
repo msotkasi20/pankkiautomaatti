@@ -52,6 +52,8 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
 
     ui->muuSumma->installEventFilter(this);
 
+}
+
 
 
 creditwindow::~creditwindow()
