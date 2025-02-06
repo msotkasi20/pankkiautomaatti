@@ -15,6 +15,7 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
     , ui(new Ui::creditwindow)
     , idcard(idcard)
     , creditlimit(0.0)
+    , idaccount(idaccount)
     , networkManager(new QNetworkAccessManager(this))
     , inactivityTimer(new QTimer(this))
 {
@@ -52,6 +53,14 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
 
     ui->muuSumma->installEventFilter(this);
 
+    connect(ui->kakskytBtn, &QPushButton::clicked, this, [this]() { creditWithdraw(20); });
+    connect(ui->nelkytBtn, &QPushButton::clicked, this, [this]() { creditWithdraw(40); });
+    connect(ui->viiskytBtn, &QPushButton::clicked, this, [this]() { creditWithdraw(50); });
+    connect(ui->sataBtn, &QPushButton::clicked, this, [this]() { creditWithdraw(100); });
+
+
+
+
 }
 
 
@@ -65,6 +74,23 @@ creditwindow::~creditwindow()
 void creditwindow::updatebalancedisplay()
 {
     ui->creditlimit->setText(QString::number(creditlimit,'f',2));
+}
+
+void creditwindow::creditWithdraw(int amount)
+{
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    QUrl url(QString("http://localhost:3000/transaction"));
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QJsonObject payload;
+    payload["amount"] = amount;
+    payload["idaccounts"] = idaccount;
+    payload["action"] = "withdraw";
+    QJsonDocument jsonDoc(payload);
+
+    QNetworkReply *reply = manager->post(request, jsonDoc.toJson());
+
 }
 
 void creditwindow::fetchCreditAccount()
@@ -101,11 +127,13 @@ void creditwindow::fetchCreditAccount()
                 // Haetaan ensimmäinen objekti taulukosta
                 QJsonObject accountData = dataArray.first().toObject();
 
-                // Päivitetään balance
+                // Päivitetään creditlimit ja idaccount
                 this->creditlimit = accountData.value("creditlimit").toDouble();
+                this->idaccount = accountData.value("idaccounts").toInt();
 
                 // Debug-tulosteet
                 qDebug() << "Fetched creditlimit: " << creditlimit;
+                qDebug() << "Fetched idaccount: " << idaccount;
 
                 // Päivitetään UI
                 updatebalancedisplay();
@@ -134,7 +162,6 @@ void creditwindow::closeDueToInactivity()
 
 bool creditwindow::eventFilter(QObject *obj, QEvent *event)
 {
-
     if(event->type() == QEvent::MouseMove || event->type() == QEvent::KeyPress) {        //Jos liikutetaan hiirtä tai painetaan näppäintä ajastin resettaa.
         resetInactivityTimer(); //Kutsutaan funktiota resetInactivityTimer
     }
@@ -147,13 +174,6 @@ bool creditwindow::eventFilter(QObject *obj, QEvent *event)
 
     }
 
-    // if (ui->muuBtn && event->type() == QEvent::MouseButtonPress)
-    // {
-    //     virtualKeyboard->show();
-    //     ui->muuSumma->setFocus();
-    //     return true;
-
-    // }
     return QDialog::eventFilter(obj, event);
 
 

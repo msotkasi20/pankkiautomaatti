@@ -23,6 +23,7 @@ public:
     explicit creditwindow(const QString &idcard, QWidget *parent = nullptr);
     ~creditwindow();
     void updatebalancedisplay();
+    void creditWithdraw(int amount);
 
     keyboard *virtualKeyboard;
 
@@ -30,6 +31,8 @@ private:
     Ui::creditwindow *ui;
     QString idcard;
     double creditlimit;
+    int idaccount;
+    int amount;
 
     void fetchCreditAccount();
     QNetworkAccessManager *networkManager;
