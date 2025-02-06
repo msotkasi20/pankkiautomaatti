@@ -8,7 +8,7 @@ keyboard::keyboard(QLineEdit *targetField, QWidget *parent)
     setFixedSize(200,150);
 
     QGridLayout *layout = new QGridLayout(this);
-    QStringList keys = {"1","2","3","4","5","6","7","8","9","C","0"};
+    QStringList keys = {"1","2","3","4","5","6","7","8","9","C","0","->"};
 
     int row = 0, col = 0;
     for (const QString &key : keys) {
@@ -22,6 +22,11 @@ keyboard::keyboard(QLineEdit *targetField, QWidget *parent)
     setLayout(layout);
 }
 
+void keyboard::setTargetField(QLineEdit *targetField)
+{
+    this->targetField = targetField;
+}
+
 void keyboard::keyPressed()
 {
     QPushButton *button = qobject_cast<QPushButton* >(sender());
@@ -29,6 +34,15 @@ void keyboard::keyPressed()
 
     if (button->text() == "C") {
         targetField->clear(); // Tyhjennetään tekstikenttä
+    } else if (button->text() == "->"){
+        QWidget *nextWidget = targetField->nextInFocusChain();
+        while (nextWidget && !qobject_cast<QLineEdit *>(nextWidget)){
+            nextWidget = nextWidget->nextInFocusChain();
+        }
+        if (nextWidget) {
+            nextWidget->setFocus();
+        }
+
     } else {
         targetField->setText(targetField->text() + button->text()); //Asetetaan tekstikenttään napista painettu numero
     }

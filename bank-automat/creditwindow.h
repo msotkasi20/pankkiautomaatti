@@ -37,6 +37,7 @@ private:
     QTimer *inactivityTimer;
     void resetInactivityTimer();
     void closeDueToInactivity();
+    keyboard *virtualKeyboard;
 
 
 

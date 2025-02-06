@@ -11,6 +11,7 @@
 
 creditwindow::creditwindow(const QString &idcard, QWidget *parent)
     : QDialog(parent)
+    , virtualKeyboard(nullptr)
     , ui(new Ui::creditwindow)
     , idcard(idcard)
     , creditlimit(0.0)
@@ -20,7 +21,12 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
     qDebug() << "creditwindow created with idcard: " << idcard;
 
     ui->setupUi(this);
-    virtualKeyboard = nullptr;
+
+
+    virtualKeyboard = new keyboard(nullptr, this);
+    virtualKeyboard->move(440,200);
+    virtualKeyboard->show();
+
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
     timer -> start();
@@ -43,11 +49,15 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
     connect(ui->logoutBtn, &QPushButton::clicked, this, &creditwindow::logOut);
 
     ui->muuBtn->installEventFilter(this);
-}
+
+    ui->muuSumma->installEventFilter(this);
+
+
 
 creditwindow::~creditwindow()
 {
     delete ui;
+    delete virtualKeyboard;
 }
 
 void creditwindow::updatebalancedisplay()
@@ -122,8 +132,17 @@ void creditwindow::closeDueToInactivity()
 
 bool creditwindow::eventFilter(QObject *obj, QEvent *event)
 {
-    if(event->type() == QEvent::MouseMove || event->type() == QEvent::KeyPress) { //Jos liikutetaan hiirtä tai painetaan näppäintä ajastin resettaa.
+
+    if(event->type() == QEvent::MouseMove || event->type() == QEvent::KeyPress) {        //Jos liikutetaan hiirtä tai painetaan näppäintä ajastin resettaa.
         resetInactivityTimer(); //Kutsutaan funktiota resetInactivityTimer
+    }
+
+    if (obj == ui->muuBtn && event->type() == QEvent::MouseButtonPress)
+    {
+        ui->muuSumma->setFocus();
+        virtualKeyboard->setTargetField(ui->muuSumma);
+        return true;
+
     }
 
     // if (ui->muuBtn && event->type() == QEvent::MouseButtonPress)
@@ -148,16 +167,27 @@ void creditwindow::showTime()
 void creditwindow::showPage1()
 {
     ui->stackedWidget->setCurrentIndex(0); //Näyttää "Nosto" sivun
+
+    virtualKeyboard->show();
+
+
 }
 
 void creditwindow::showPage2()
 {
     ui->stackedWidget->setCurrentIndex(1);
+
+    virtualKeyboard->close();
+
 }
 
 void creditwindow::showPage3()
 {
     ui->stackedWidget->setCurrentIndex(2);
+
+    virtualKeyboard->close();
+
+
 }
 
 void creditwindow::logOut()
