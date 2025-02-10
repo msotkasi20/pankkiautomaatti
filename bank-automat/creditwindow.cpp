@@ -8,6 +8,7 @@
 #include <QJsonDocument>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QThread>
 
 creditwindow::creditwindow(const QString &idcard, QWidget *parent)
     : QDialog(parent)
@@ -75,6 +76,7 @@ creditwindow::~creditwindow()
 
 void creditwindow::updatebalancedisplay()
 {
+    ui->creditlimit->clear();
     ui->creditlimit->setText(QString::number(creditlimit,'f',2));
 }
 
@@ -97,6 +99,8 @@ void creditwindow::creditWithdraw(int amount)
 
 
     ui->uusicreditlimit->setText("Nostit: " + QString::number(amount));
+
+     QTimer::singleShot(500, this, &creditwindow::fetchCreditAccount);
 
     } else {
         QMessageBox nostoError;
