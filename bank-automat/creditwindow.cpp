@@ -94,13 +94,15 @@ void creditwindow::creditWithdraw(int amount)
     QJsonDocument jsonDoc(payload);
 
     QNetworkReply *reply = manager->post(request, jsonDoc.toJson());
+
+
+    ui->uusicreditlimit->setText("Nostit: " + QString::number(amount));
+
     } else {
         QMessageBox nostoError;
         nostoError.setText("Nostettava summa kymmenen euron tarkkuudella");
         nostoError.exec();
     }
-
-
 
 }
 
