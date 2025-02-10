@@ -1,93 +1,81 @@
--- MySQL Workbench Forward Engineering
+-- Drop the database if it exists
+DROP DATABASE IF EXISTS `oamkR5ATM`;
 
--- -----------------------------------------------------
--- Schema oamkR5ATM
--- -----------------------------------------------------
+-- Create the database
+CREATE SCHEMA IF NOT EXISTS `oamkR5ATM` DEFAULT CHARACTER SET utf8;
+USE `oamkR5ATM`;
 
--- -----------------------------------------------------
--- Schema oamkR5ATM
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `oamkR5ATM` DEFAULT CHARACTER SET utf8 ;
-USE `oamkR5ATM` ;
+-- Drop tables if they exist
+DROP TABLE IF EXISTS `accounts_cards`;
+DROP TABLE IF EXISTS `transaction`;
+DROP TABLE IF EXISTS `card`;
+DROP TABLE IF EXISTS `accounts`;
+DROP TABLE IF EXISTS `customer`;
 
--- -----------------------------------------------------
--- Table `oamkR5ATM`.`customer`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `oamkR5ATM`.`customer` (
+-- Create the customer table
+CREATE TABLE `customer` (
   `idCustomer` INT NOT NULL AUTO_INCREMENT,
   `firstname` VARCHAR(45) NULL,
   `lastname` VARCHAR(45) NULL,
   `phone` VARCHAR(45) NULL,
-  PRIMARY KEY (`idCustomer`))
-ENGINE = InnoDB;
+  PRIMARY KEY (`idCustomer`)
+) ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `oamkR5ATM`.`accounts`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `oamkR5ATM`.`accounts` (
+-- Create the accounts table
+CREATE TABLE `accounts` (
   `idaccounts` INT NOT NULL AUTO_INCREMENT,
   `type` ENUM('debit', 'credit') NOT NULL,
   `balance` DOUBLE NULL,
   `creditlimit` DOUBLE NULL,
   `idcustomer` INT NULL,
   PRIMARY KEY (`idaccounts`),
-  INDEX `idcustomer_idx` (`idcustomer` ASC) VISIBLE,
-  CONSTRAINT `idcustomer`
+  INDEX `idcustomer_idx` (`idcustomer` ASC),
+  CONSTRAINT `fk_idcustomer`
     FOREIGN KEY (`idcustomer`)
-    REFERENCES `oamkR5ATM`.`customer` (`idCustomer`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `customer` (`idCustomer`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `oamkR5ATM`.`card`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `oamkR5ATM`.`card` (
+-- Create the card table
+CREATE TABLE `card` (
   `idcard` INT NOT NULL AUTO_INCREMENT,
   `type` ENUM('debit', 'credit', 'dual') NOT NULL,
   `cardpin` VARCHAR(255) NULL,
-  PRIMARY KEY (`idcard`))
-ENGINE = InnoDB;
+  PRIMARY KEY (`idcard`)
+) ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `oamkR5ATM`.`transaction`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `oamkR5ATM`.`transaction` (
+-- Create the transaction table
+CREATE TABLE `transaction` (
   `idtransaction` INT NOT NULL AUTO_INCREMENT,
   `action` VARCHAR(45) NULL,
   `actiontimestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `amount` DOUBLE NULL,
   `idaccounts` INT NOT NULL,
   PRIMARY KEY (`idtransaction`),
-  INDEX `idaccount_idx` (`idaccounts` ASC) VISIBLE,
-  CONSTRAINT `idaccounts`
+  INDEX `idaccount_idx` (`idaccounts` ASC),
+  CONSTRAINT `fk_idaccounts`
     FOREIGN KEY (`idaccounts`)
-    REFERENCES `oamkR5ATM`.`accounts` (`idaccounts`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `accounts` (`idaccounts`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `oamkR5ATM`.`accounts_cards`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `oamkR5ATM`.`accounts_cards` (
+-- Create the accounts_cards table
+CREATE TABLE `accounts_cards` (
   `idaccounts` INT NOT NULL,
   `idcard` INT NOT NULL,
   PRIMARY KEY (`idaccounts`, `idcard`),
-  INDEX `idaccounts` (`idaccounts` ASC) VISIBLE,
-  INDEX `idcard` (`idcard` ASC) VISIBLE,
+  INDEX `idaccounts_idx` (`idaccounts` ASC),
+  INDEX `idcard_idx` (`idcard` ASC),
   CONSTRAINT `fk_accounts_id`
     FOREIGN KEY (`idaccounts`)
-    REFERENCES `oamkR5ATM`.`accounts` (`idaccounts`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `accounts` (`idaccounts`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_cards_id`
     FOREIGN KEY (`idcard`)
-    REFERENCES `oamkR5ATM`.`card` (`idcard`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+    REFERENCES `card` (`idcard`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE = InnoDB;
