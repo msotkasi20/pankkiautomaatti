@@ -24,6 +24,7 @@ public:
     ~creditwindow();
     void updatebalancedisplay();
     void creditWithdraw(int amount);
+    void setSum(int amount);
 
     keyboard *virtualKeyboard;
 

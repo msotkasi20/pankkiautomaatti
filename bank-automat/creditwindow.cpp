@@ -51,14 +51,16 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
 
     ui->muuBtn->installEventFilter(this);
 
-    ui->muuSumma->installEventFilter(this);
+    ui->nostoSumma->installEventFilter(this);
 
-    connect(ui->kakskytBtn, &QPushButton::clicked, this, [this]() { creditWithdraw(20); });
-    connect(ui->nelkytBtn, &QPushButton::clicked, this, [this]() { creditWithdraw(40); });
-    connect(ui->viiskytBtn, &QPushButton::clicked, this, [this]() { creditWithdraw(50); });
-    connect(ui->sataBtn, &QPushButton::clicked, this, [this]() { creditWithdraw(100); });
-
-
+    connect(ui->kakskytBtn, &QPushButton::clicked, this, [this]() { setSum(20); });
+    connect(ui->nelkytBtn, &QPushButton::clicked, this, [this]() { setSum(40); });
+    connect(ui->viiskytBtn, &QPushButton::clicked, this, [this]() { setSum(50); });
+    connect(ui->sataBtn, &QPushButton::clicked, this, [this]() { setSum(100); });
+    connect(ui->withdrawBtn, &QPushButton::clicked, this, [this]() {
+        int amount = ui->nostoSumma->text().toInt();
+        creditWithdraw(amount);
+    });
 
 
 }
@@ -78,6 +80,8 @@ void creditwindow::updatebalancedisplay()
 
 void creditwindow::creditWithdraw(int amount)
 {
+
+    if (amount % 10 == 0){
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QUrl url(QString("http://localhost:3000/transaction"));
     QNetworkRequest request(url);
@@ -90,17 +94,21 @@ void creditwindow::creditWithdraw(int amount)
     QJsonDocument jsonDoc(payload);
 
     QNetworkReply *reply = manager->post(request, jsonDoc.toJson());
-<<<<<<< Updated upstream
-=======
+
 
     ui->uusicreditlimit->setText("Nostit: " + QString::number(amount));
+
     } else {
         QMessageBox nostoError;
         nostoError.setText("Nostettava summa kymmenen euron tarkkuudella");
         nostoError.exec();
     }
->>>>>>> Stashed changes
 
+}
+
+void creditwindow::setSum(int amount)
+{
+    ui->nostoSumma->setText(QString::number(amount));
 }
 
 void creditwindow::fetchCreditAccount()
@@ -161,25 +169,30 @@ void creditwindow::fetchCreditAccount()
 void creditwindow::resetInactivityTimer()
 {
     inactivityTimer->start(); //Restarttaa ajastimen (30 sek)
+    qDebug() << "Timer restarted.";
 }
 
 void creditwindow::closeDueToInactivity()
 {
     qDebug() << "Closing due to inactivity.";
     close();
+    QMessageBox logout;
+    logout.setText("Sinut on kirjattu ulos\nKirjaudu sisään uudelleen");
+    logout.exec();
 }
 
 
 bool creditwindow::eventFilter(QObject *obj, QEvent *event)
 {
     if(event->type() == QEvent::MouseMove || event->type() == QEvent::KeyPress) {        //Jos liikutetaan hiirtä tai painetaan näppäintä ajastin resettaa.
+        qDebug() << "Liikettä tunnistettu.";
         resetInactivityTimer(); //Kutsutaan funktiota resetInactivityTimer
     }
 
     if (obj == ui->muuBtn && event->type() == QEvent::MouseButtonPress)
     {
-        ui->muuSumma->setFocus();
-        virtualKeyboard->setTargetField(ui->muuSumma);
+        ui->nostoSumma->setFocus();
+        virtualKeyboard->setTargetField(ui->nostoSumma);
         return true;
 
     }
