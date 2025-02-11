@@ -11,7 +11,6 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    accoutmain.cpp \
     creditwindow.cpp \
     debitwindow.cpp \
     keyboard.cpp \
@@ -19,14 +18,12 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
-    accoutmain.h \
     creditwindow.h \
     debitwindow.h \
     keyboard.h \
     mainwindow.h
 
 FORMS += \
-    accoutmain.ui \
     creditwindow.ui \
     debitwindow.ui \
     mainwindow.ui
