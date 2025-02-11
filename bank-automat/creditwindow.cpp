@@ -47,6 +47,8 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
 
     connect(ui->nostoBtn, &QPushButton::clicked, this, &creditwindow::showPage1);
     connect(ui->tilitapahtumatBtn, &QPushButton::clicked, this, &creditwindow::showPage2);
+    connect(ui->tilitapahtumatBtn, &QPushButton::clicked, this, &creditwindow::fetchTransactions);
+
     connect(ui->creditlimitBtn, &QPushButton::clicked, this, &creditwindow::showPage3);
     connect(ui->logoutBtn, &QPushButton::clicked, this, &creditwindow::logOut);
 
@@ -168,6 +170,42 @@ void creditwindow::fetchCreditAccount()
         }
         reply->deleteLater();
     });
+}
+
+void creditwindow::fetchTransactions()
+{
+    qDebug() << idaccount;
+    QUrl url(QString("http://localhost:3000/transaction/byAccountId/%1").arg(idaccount));
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply *reply = networkManager->get(request);
+
+    connect(reply, &QNetworkReply::finished, this, [reply](){
+        if (reply->error() == QNetworkReply::NoError){
+            //Parse the JSON response
+            QByteArray responseData = reply->readAll();
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
+            QJsonObject jsonObj = jsonDoc.object();
+
+            qDebug() << "Full JSON response: " << jsonDoc.toJson(QJsonDocument::Indented);
+
+            bool success = jsonObj.value("success").toBool();
+            if (success) {
+                // Tarkistetaan että "data" on array
+                if (!jsonObj.contains("data") || !jsonObj["data"].isArray()) {
+                    qDebug() << "Error: 'data' field is missing or is not an array.";
+                    return;
+                }
+
+                QJsonArray dataArray = jsonObj["data"].toArray();
+                if (dataArray.isEmpty()) {
+                    qDebug() << "Error: 'data' array is empty.";
+                    return;
+                }
+            }
+        }
+     });
 }
 
 void creditwindow::resetInactivityTimer()
