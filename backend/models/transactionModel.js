@@ -19,6 +19,18 @@ export async function getAlltransaction(pool) {
       throw new Error(`Database error: ${error.message}`);
     }
   }
+
+  export async function getTransactionByAccountId(pool, id) {
+    try {
+      const [rows] = await pool.query('SELECT * FROM transaction WHERE idaccounts = ?', [id]);
+      if (rows.length === 0) {
+        throw new Error('Transaction not found');
+      }
+      return rows; // Palauttaa kaikki transaktiot tilin id:n perusteella.
+    } catch (error) {
+      throw new Error(`Database error: ${error.message}`);
+    }
+  }
   
   export async function addTransaction(pool, transactionData) {
     try {

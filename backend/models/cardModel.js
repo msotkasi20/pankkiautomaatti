@@ -41,7 +41,7 @@ export async function encryptCardPin(cardpin) {
           if (!card.cardpin) {
             throw new Error('PIN is missing');
           }
-      
+          
           const pinAsString = String(card.cardpin);
       
           // Kryptataan PIN ennen tallentamista

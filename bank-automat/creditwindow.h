@@ -36,6 +36,7 @@ private:
     int amount;
 
     void fetchCreditAccount();
+    void fetchTransactions();
     QNetworkAccessManager *networkManager;
 
     QTimer *inactivityTimer;
