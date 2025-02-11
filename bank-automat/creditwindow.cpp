@@ -9,6 +9,10 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QThread>
+#include <QStandardItemModel>
+#include <QHeaderView>
+#include <QTableView>
+
 
 creditwindow::creditwindow(const QString &idcard, QWidget *parent)
     : QDialog(parent)
@@ -61,6 +65,7 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
     connect(ui->withdrawBtn, &QPushButton::clicked, this, [this]() {
         int amount = ui->nostoSumma->text().toInt();
         creditWithdraw(amount);
+        fetchTransactions();
     });
 
 
@@ -170,6 +175,74 @@ void creditwindow::fetchCreditAccount()
     });
 }
 
+<<<<<<< Updated upstream
+=======
+void creditwindow::fetchTransactions()
+{
+    qDebug() << idaccount;
+    QUrl url(QString("http://localhost:3000/transaction/byAccountId/%1").arg(idaccount));
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply *reply = networkManager->get(request);
+
+    connect(reply, &QNetworkReply::finished, this, [reply, this](){
+        if (reply->error() == QNetworkReply::NoError){
+            //Parse the JSON response
+            QByteArray responseData = reply->readAll();
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
+            QJsonObject jsonObj = jsonDoc.object();
+
+            qDebug() << "Full JSON response: " << jsonDoc.toJson(QJsonDocument::Indented);
+
+            bool success = jsonObj.value("success").toBool();
+            if (success) {
+                // Tarkistetaan että "data" on array
+                if (!jsonObj.contains("data") || !jsonObj["data"].isArray()) {
+                    qDebug() << "Error: 'data' field is missing or is not an array.";
+                    return;
+                }
+
+                QJsonArray dataArray = jsonObj["data"].toArray();
+                if (dataArray.isEmpty()) {
+                    qDebug() << "Error: 'data' array is empty.";
+                    return;
+                }
+                QStandardItemModel *transactionModel = new QStandardItemModel(this);
+                transactionModel->setHorizontalHeaderLabels({"Määrä", "Päivämäärä"});
+
+                for (int i = dataArray.size() - 1; i >= 0; --i) {
+                    QJsonValue value = dataArray[i];
+                    if (value.isObject()) {
+                        QJsonObject transaction = value.toObject();
+
+                        double amount = transaction["amount"].toDouble();
+                        QString date = transaction["actiontimestamp"].toString();
+
+                        QList<QStandardItem *> rowItems;
+                        rowItems.append(new QStandardItem(QString::number(amount, 'f', 2)));
+                        rowItems.append(new QStandardItem(date));
+
+                        transactionModel->appendRow(rowItems);
+
+                    }
+                }
+                QTableView *tableView = qobject_cast<QTableView *>(ui->tilitapahtumatView);
+                if(tableView) {
+                    tableView->setModel(transactionModel);
+
+                    tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+                }
+            } else {
+                qDebug() << "Error: Transaction fetch failed.";
+
+            }
+            reply->deleteLater();
+        }
+     });
+}
+
+>>>>>>> Stashed changes
 void creditwindow::resetInactivityTimer()
 {
     inactivityTimer->start(); //Restarttaa ajastimen (30 sek)
