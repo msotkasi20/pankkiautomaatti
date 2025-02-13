@@ -209,8 +209,12 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
      </property>
     </widget>
    </widget>
+
+    <widget class="QTableView" name="tilitapahtumatView">
+
    <widget class="QWidget" name="page_3">
     <widget class="QListView" name="listView">
+
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -221,6 +225,7 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
      </property>
     </widget>
    </widget>
+
    <widget class="QWidget" name="page_2">
     <widget class="QWidget" name="horizontalLayoutWidget">
      <property name="geometry">
