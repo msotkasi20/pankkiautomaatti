@@ -51,6 +51,8 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
 
     connect(ui->nostoBtn, &QPushButton::clicked, this, &creditwindow::showPage1);
     connect(ui->tilitapahtumatBtn, &QPushButton::clicked, this, &creditwindow::showPage2);
+    connect(ui->tilitapahtumatBtn, &QPushButton::clicked, this, &creditwindow::fetchTransactions);
+
     connect(ui->creditlimitBtn, &QPushButton::clicked, this, &creditwindow::showPage3);
     connect(ui->logoutBtn, &QPushButton::clicked, this, &creditwindow::logOut);
 
@@ -175,8 +177,6 @@ void creditwindow::fetchCreditAccount()
     });
 }
 
-<<<<<<< Updated upstream
-=======
 void creditwindow::fetchTransactions()
 {
     qDebug() << idaccount;
@@ -186,7 +186,10 @@ void creditwindow::fetchTransactions()
 
     QNetworkReply *reply = networkManager->get(request);
 
-    connect(reply, &QNetworkReply::finished, this, [reply, this](){
+
+
+    connect(reply, &QNetworkReply::finished, this, [reply](){
+
         if (reply->error() == QNetworkReply::NoError){
             //Parse the JSON response
             QByteArray responseData = reply->readAll();
@@ -208,6 +211,7 @@ void creditwindow::fetchTransactions()
                     qDebug() << "Error: 'data' array is empty.";
                     return;
                 }
+
                 QStandardItemModel *transactionModel = new QStandardItemModel(this);
                 transactionModel->setHorizontalHeaderLabels({"Määrä", "Päivämäärä"});
 
@@ -242,7 +246,8 @@ void creditwindow::fetchTransactions()
      });
 }
 
->>>>>>> Stashed changes
+
+
 void creditwindow::resetInactivityTimer()
 {
     inactivityTimer->start(); //Restarttaa ajastimen (30 sek)

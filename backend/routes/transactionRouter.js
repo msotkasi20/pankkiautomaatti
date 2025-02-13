@@ -6,6 +6,7 @@ import {
   addTransaction,
   updateTransaction,
   deleteTransaction,
+  getTransactionByAccountId,
  } from '../models/transactionModel.js';
  import {
   getAccountsById,
@@ -29,6 +30,17 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const transaction = await getTransactionById(req.pool, req.params.id);
+    res.json({ success: true, data: transaction });
+  } catch (error) {
+    console.error(error.message);
+    res.status(404).json({ success: false, error: error.message });
+  }
+});
+
+// Hakee kaikki transaktiot tilin id:n perusteella
+router.get('/byAccountId/:id', async (req, res, next) => {
+  try {
+    const transaction = await getTransactionByAccountId(req.pool, req.params.id);
     res.json({ success: true, data: transaction });
   } catch (error) {
     console.error(error.message);
