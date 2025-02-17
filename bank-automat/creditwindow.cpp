@@ -114,6 +114,7 @@ void creditwindow::creditWithdraw(int amount)
         nostoError.setText("Nostettava summa kymmenen euron tarkkuudella");
         nostoError.exec();
     }
+    qDebug() << "working version";
 
 }
 
@@ -323,5 +324,7 @@ void creditwindow::logOut()
     qDebug() << "logoutBtn clicked.";
     close();
 }
+
+
 
 
