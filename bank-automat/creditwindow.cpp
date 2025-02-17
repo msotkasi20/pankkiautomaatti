@@ -311,7 +311,7 @@ void creditwindow::showPage2()
 
 void creditwindow::showPage3()
 {
-    ui->stackedWidget->setCurrentIndex(2);
+    ui->stackedWidget->setCurrentIndex(3);
 
     virtualKeyboard->close();
 
