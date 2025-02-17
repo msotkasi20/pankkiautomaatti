@@ -114,7 +114,7 @@ void creditwindow::creditWithdraw(int amount)
         nostoError.setText("Nostettava summa kymmenen euron tarkkuudella");
         nostoError.exec();
     }
-    qDebug() << "working version";
+
 
 }
 
@@ -189,7 +189,7 @@ void creditwindow::fetchTransactions()
 
 
 
-    connect(reply, &QNetworkReply::finished, this, [reply](){
+    connect(reply, &QNetworkReply::finished, this, [reply, this](){
 
         if (reply->error() == QNetworkReply::NoError){
             //Parse the JSON response
