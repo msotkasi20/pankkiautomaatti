@@ -157,13 +157,14 @@ void debitwindow::fetchDebitAccount()
                 // Haetaan ensimmäinen objekti taulukosta
                 QJsonObject accountData = dataArray.first().toObject();
 
-                // Päivitetään creditlimit ja idaccount
+                // Päivitetään balance ja idaccount
                 this->balance = accountData.value("balance").toDouble();
                 this->idaccount = accountData.value("idaccounts").toInt();
 
                 // Debug-tulosteet
                 qDebug() << "Fetched balance: " << balance;
                 qDebug() << "Fetched idaccount: " << idaccount;
+
 
                 // Päivitetään UI
                 updatebalancedisplay();
