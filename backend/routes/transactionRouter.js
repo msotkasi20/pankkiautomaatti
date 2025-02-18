@@ -63,57 +63,6 @@ router.post('/', async (req, res) => {
   
 
     try {
-      const account = await getAccountsById(req.pool, idaccounts);
-      if (!account) {
-        return res.status(404).json({ success: false, message: 'Account not found' });
-      }
-  
-      let newBalance = account.balance;
-      let newCreditLimit = account.creditlimit;
-  
-      if (account.type === 'debit') {
-        if (account.balance >= amount) {
-          newBalance -= amount;
-        } else {
-          return res.status(400).json({ success: false, message: 'Insufficient funds' });
-        }
-      } else if (account.type === 'credit') {
-        if (account.creditlimit >= amount) {
-          newCreditLimit -= amount;
-        } else {
-          return res.status(400).json({ success: false, message: 'Insufficient credit limit' });
-        }
-      
-  
-        if (debitAccount.balance >= amount) {
-          newBalance = debitAccount.balance - amount;
-          await updateAccounts(req.pool, debitAccount.id, { balance: newBalance });
-        } else if (creditAccount.creditlimit >= amount) {
-          newCreditLimit = creditAccount.creditlimit - amount;
-          await updateAccounts(req.pool, creditAccount.id, { creditlimit: newCreditLimit });
-        } else {
-          return res.status(400).json({ success: false, message: 'Insufficient funds in both accounts' });
-        }
-      }
-  
-      const updatedAccountData = {
-        type: account.type,
-        balance: newBalance,
-        creditlimit: newCreditLimit,
-        idcustomer: account.idcustomer
-      };
-    
-      await updateAccounts(req.pool, idaccounts, updatedAccountData);
-    const newTransaction = await addTransaction(req.pool, req.body);
-    res.status(201).json(newTransaction); //palauttaa uuden transaction tiedot
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).json({error: error.message});
-  }
-    
-  });
-
-/* try {
     // Haetaan tilin tiedot tarkistusta varten
     console.log(`Haetaan tilin tiedot tarkistusta varten id:llä ${idaccounts}`);
     const account = await getAccountsById(req.pool, idaccounts);
@@ -124,8 +73,11 @@ router.post('/', async (req, res) => {
       });
     }
 
+    // Tarkistetaan tilin tyyppi credit/debit
+    if (account.type === 'credit') {
+
     // Tarkistetaan, onko tilillä tarpeeksi rahaa
-    /*if (account.creditlimit < amount) {
+    if (account.creditlimit < amount) {
       return res.status(400).json({
         success: false,
         message: 'Insufficient balance for this withdrawal',
@@ -146,12 +98,37 @@ router.post('/', async (req, res) => {
 
    // Päivitetään koko tili, mutta vain saldo on muuttunut
    await updateAccounts(req.pool, idaccounts, updatedAccountData);
-  }
-  catch (error) {
-    console.error(error.message);
-    res.status(500).json({error: error.message});
-  }
-});*/
+
+  } else if (account.type === 'debit') {
+    // Tarkistetaan, onko tilillä tarpeeksi rahaa
+    if (account.balance < amount) {
+      return res.status(400).json({
+        success: false,
+        message: 'Insufficient balance for this withdrawal',
+      });
+    }
+
+   // Lasketaan uusi saldo
+   let newBalance = account.balance - amount;
+   console.log(`Uusi balance: ${newBalance}`);
+
+   // Muodostetaan uusi tilitieto päivittämistä varten
+   const updatedAccountData = {
+     type: account.type,
+     balance: newBalance, //Päivitetty balance
+     creditlimit: account.creditlimit,
+     idcustomer: account.idcustomer
+   };
+
+   // Päivitetään koko tili, mutta vain saldo on muuttunut
+   await updateAccounts(req.pool, idaccounts, updatedAccountData);
+    }
+  
+} catch (error) {
+  console.error(error.message);
+  res.status(500).json({error: error.message});
+}
+});
 
 //päivittää olemassa olevan transaction
 router.put('/:id', async (req, res) => {
