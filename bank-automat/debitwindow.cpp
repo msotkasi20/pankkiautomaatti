@@ -1,7 +1,5 @@
 #include "debitwindow.h"
 #include "ui_debitwindow.h"
-#include "mainwindow.h"
-#include <QDebug>
 #include <QTimer>
 #include <QDateTime>
 #include <QNetworkRequest>
@@ -10,17 +8,31 @@
 #include <QJsonDocument>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QThread>
+#include <QStandardItemModel>
+#include <QHeaderView>
+#include <QTableView>
+
 
 debitwindow::debitwindow(const QString &idcard, QWidget *parent)
     : QDialog(parent)
+    , virtualKeyboard(nullptr)
     , ui(new Ui::debitwindow)
     , idcard(idcard)
+    , balance(0.0)
+    , idaccount(idaccount)
     , networkManager(new QNetworkAccessManager(this))
     , inactivityTimer(new QTimer(this))
 {
     qDebug() << "debitwindow created with idcard: " << idcard;
 
     ui->setupUi(this);
+
+
+    virtualKeyboard = new keyboard(nullptr, this);
+    virtualKeyboard->move(440,200);
+    virtualKeyboard->close();
+
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
     timer -> start();
@@ -37,28 +49,86 @@ debitwindow::debitwindow(const QString &idcard, QWidget *parent)
 
     fetchDebitAccount();
 
-    qDebug() << idcard;
+    connect(ui->nostoBtn, &QPushButton::clicked, this, &debitwindow::showPage1);
+    connect(ui->tilitapahtumatBtn, &QPushButton::clicked, this, &debitwindow::showPage2);
+    connect(ui->tilitapahtumatBtn, &QPushButton::clicked, this, &debitwindow::fetchTransactions);
+
+    connect(ui->balanceBtn, &QPushButton::clicked, this, &debitwindow::showPage3);
+    connect(ui->logoutBtn, &QPushButton::clicked, this, &debitwindow::logOut);
+
+    ui->muuBtn->installEventFilter(this);
+
+    ui->nostoSumma->installEventFilter(this);
+
+    connect(ui->kakskytBtn, &QPushButton::clicked, this, [this]() { setSum(20); });
+    connect(ui->nelkytBtn, &QPushButton::clicked, this, [this]() { setSum(40); });
+    connect(ui->viiskytBtn, &QPushButton::clicked, this, [this]() { setSum(50); });
+    connect(ui->sataBtn, &QPushButton::clicked, this, [this]() { setSum(100); });
+    connect(ui->withdrawBtn, &QPushButton::clicked, this, [this]() {
+        int amount = ui->nostoSumma->text().toInt();
+        debitWithdraw(amount);
+        fetchTransactions();
+    });
+
+
 }
+
+
 
 debitwindow::~debitwindow()
 {
     delete ui;
+    delete virtualKeyboard;
 }
 
 void debitwindow::updatebalancedisplay()
 {
-    // päivitä saldo käyttöliittymään
-        ui->debitbalance->setText(QString::number(balance,'f',2));
+    ui->balance->clear();
+    ui->balance->setText(QString::number(balance,'f',2));
+}
+
+void debitwindow::debitWithdraw(int amount)
+{
+
+    if (amount % 10 == 0){
+        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+        QUrl url(QString("http://localhost:3000/transaction"));
+        QNetworkRequest request(url);
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+        QJsonObject payload;
+        payload["amount"] = amount;
+        payload["idaccounts"] = idaccount;
+        payload["action"] = "withdraw";
+        QJsonDocument jsonDoc(payload);
+
+        QNetworkReply *reply = manager->post(request, jsonDoc.toJson());
+
+
+        ui->uusiBalance->setText("Nostit: " + QString::number(amount));
+
+        QTimer::singleShot(500, this, &debitwindow::fetchDebitAccount);
+
+    } else {
+        QMessageBox nostoError;
+        nostoError.setText("Nostettava summa kymmenen euron tarkkuudella");
+        nostoError.exec();
+    }
+
+
+}
+
+void debitwindow::setSum(int amount)
+{
+    ui->nostoSumma->setText(QString::number(amount));
 }
 
 void debitwindow::fetchDebitAccount()
 {
- //Haetaan debit-tili
     QUrl url(QString("http://localhost:3000/accounts_cards/by-card-and-type?idcard=%1&type=debit").arg(idcard));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-    //Lähetetään GET pyyntö
     QNetworkReply *reply = networkManager->get(request);
 
     connect(reply, &QNetworkReply::finished, this, [reply, this](){
@@ -87,11 +157,13 @@ void debitwindow::fetchDebitAccount()
                 // Haetaan ensimmäinen objekti taulukosta
                 QJsonObject accountData = dataArray.first().toObject();
 
-                // Päivitetään balance
+                // Päivitetään creditlimit ja idaccount
                 this->balance = accountData.value("balance").toDouble();
+                this->idaccount = accountData.value("idaccounts").toInt();
 
                 // Debug-tulosteet
                 qDebug() << "Fetched balance: " << balance;
+                qDebug() << "Fetched idaccount: " << idaccount;
 
                 // Päivitetään UI
                 updatebalancedisplay();
@@ -100,29 +172,117 @@ void debitwindow::fetchDebitAccount()
                 QMessageBox::warning(this, "Error", jsonObj.value("error").toString());
             }
         } else {
-            QMessageBox::critical(this, "Network Error", "Failed to fetch debit account: "+ reply->errorString());
+            QMessageBox::critical(this, "Network Error", "Failed to fetch credit account: "+ reply->errorString());
         }
         reply->deleteLater();
     });
 }
 
+void debitwindow::fetchTransactions()
+{
+    qDebug() << idaccount;
+    QUrl url(QString("http://localhost:3000/transaction/byAccountId/%1").arg(idaccount));
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QNetworkReply *reply = networkManager->get(request);
+
+
+
+    connect(reply, &QNetworkReply::finished, this, [reply, this](){
+
+        if (reply->error() == QNetworkReply::NoError){
+            //Parse the JSON response
+            QByteArray responseData = reply->readAll();
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
+            QJsonObject jsonObj = jsonDoc.object();
+
+            qDebug() << "Full JSON response: " << jsonDoc.toJson(QJsonDocument::Indented);
+
+            bool success = jsonObj.value("success").toBool();
+            if (success) {
+                // Tarkistetaan että "data" on array
+                if (!jsonObj.contains("data") || !jsonObj["data"].isArray()) {
+                    qDebug() << "Error: 'data' field is missing or is not an array.";
+                    return;
+                }
+
+                QJsonArray dataArray = jsonObj["data"].toArray();
+                if (dataArray.isEmpty()) {
+                    qDebug() << "Error: 'data' array is empty.";
+                    return;
+                }
+
+                QStandardItemModel *transactionModel = new QStandardItemModel(this);
+                transactionModel->setHorizontalHeaderLabels({"Määrä", "Päivämäärä"});
+
+                for (int i = dataArray.size() - 1; i >= 0; --i) {
+                    QJsonValue value = dataArray[i];
+                    if (value.isObject()) {
+                        QJsonObject transaction = value.toObject();
+
+                        double amount = transaction["amount"].toDouble();
+                        QString date = transaction["actiontimestamp"].toString();
+
+                        QList<QStandardItem *> rowItems;
+                        rowItems.append(new QStandardItem(QString::number(amount, 'f', 2)));
+                        rowItems.append(new QStandardItem(date));
+
+                        transactionModel->appendRow(rowItems);
+
+                    }
+                }
+                QTableView *tableView = qobject_cast<QTableView *>(ui->tilitapahtumatView);
+                if(tableView) {
+                    tableView->setModel(transactionModel);
+
+                    tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+                }
+            } else {
+                qDebug() << "Error: Transaction fetch failed.";
+
+            }
+            reply->deleteLater();
+        }
+    });
+}
+
+
+
 void debitwindow::resetInactivityTimer()
 {
-    inactivityTimer->start(); //Restarttaa ajastimen(30 sek)
+    inactivityTimer->start(); //Restarttaa ajastimen (30 sek)
+    qDebug() << "Timer restarted.";
 }
 
 void debitwindow::closeDueToInactivity()
 {
     qDebug() << "Closing due to inactivity.";
     close();
+    QMessageBox logout;
+    logout.setText("Sinut on kirjattu ulos\nKirjaudu sisään uudelleen");
+    logout.exec();
 }
+
 
 bool debitwindow::eventFilter(QObject *obj, QEvent *event)
 {
-    if(event->type() == QEvent::MouseMove || event->type() == QEvent::KeyPress) { //Jos liikutetaan hiirtä tai painetaan näppäintä ajastin resettaa.
+    if(event->type() == QEvent::MouseMove || event->type() == QEvent::KeyPress) {        //Jos liikutetaan hiirtä tai painetaan näppäintä ajastin resettaa.
+        qDebug() << "Liikettä tunnistettu.";
         resetInactivityTimer(); //Kutsutaan funktiota resetInactivityTimer
     }
+
+    if (obj == ui->muuBtn && event->type() == QEvent::MouseButtonPress)
+    {
+        ui->nostoSumma->setFocus();
+        virtualKeyboard->setTargetField(ui->nostoSumma);
+        return true;
+
+    }
+
     return QDialog::eventFilter(obj, event);
+
+
 }
 
 void debitwindow::showTime()
@@ -131,4 +291,42 @@ void debitwindow::showTime()
     QString time_text = time.toString("hh : mm : ss");
     ui->digitalClock->setText(time_text);
 }
+
+void debitwindow::showPage1()
+{
+    ui->stackedWidget->setCurrentIndex(0); //Näyttää "Nosto" sivun
+
+    virtualKeyboard->show();
+
+
+}
+
+void debitwindow::showPage2()
+{
+    ui->stackedWidget->setCurrentIndex(1);
+
+    virtualKeyboard->close();
+
+}
+
+void debitwindow::showPage3()
+{
+    ui->stackedWidget->setCurrentIndex(3);
+
+    virtualKeyboard->close();
+
+
+}
+
+void debitwindow::logOut()
+{
+    inactivityTimer->stop();
+    qDebug() << "logoutBtn clicked.";
+    close();
+}
+
+
+
+
+
 
