@@ -65,32 +65,6 @@
     <string>Date</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>110</y>
-     <width>71</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Tilin saldo on:</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="debitbalance">
-   <property name="geometry">
-    <rect>
-     <x>110</x>
-     <y>115</y>
-     <width>101</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
   <widget class="QWidget" name="actionsWidget" native="true">
    <property name="geometry">
     <rect>
@@ -111,7 +85,7 @@
     <item>
      <widget class="QPushButton" name="balanceBtn">
       <property name="text">
-       <string>Näytä luottoraja</string>
+       <string>Näytä saldo</string>
       </property>
      </widget>
     </item>
@@ -247,7 +221,7 @@
       <item>
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Balance: </string>
+         <string>Saldo:</string>
         </property>
        </widget>
       </item>
