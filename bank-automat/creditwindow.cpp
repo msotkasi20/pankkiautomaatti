@@ -31,7 +31,7 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
 
     virtualKeyboard = new keyboard(nullptr, this);
     virtualKeyboard->move(440,200);
-    virtualKeyboard->show();
+    virtualKeyboard->close();
 
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
