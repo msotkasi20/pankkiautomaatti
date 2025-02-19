@@ -19,7 +19,11 @@ QT sovellukseen lisätty credit ja debit ikkunat, sekä QInputDialog dual kortti
 QT sovellukseen lisätty virtuaali näppäimistö, jota käyttäjä voi hyödyntää kirjautumisessa sekä nostossa.
 
 ## Aikakatkaisu credit ja debit ikkunoihin
-QT sovellukseen lisätty aikakatkaisu, joka palaa kirjautumis sivulle, jos käyttäjä on inaktiivinen 30 sekunttia. 
+QT sovellukseen lisätty aikakatkaisu, joka palaa kirjautumis sivulle, jos käyttäjä on inaktiivinen 30 sekunttia.
+
+## Projektin posteri
+<img width="248" alt="kuvakaappausposteri" src="https://github.com/user-attachments/assets/60ba9318-6c21-48f1-8818-6263f96feaf7" />
+
 
 ## Credit ikkunaan luotu valikko tapahtumille
 QT sovellukseen lisätty valikko StackedWidgetin avulla, josta käyttäjä voi valita noston, creditlimitin ja tilitapahtumat. 
