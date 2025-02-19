@@ -21,12 +21,11 @@ QT sovellukseen lisätty virtuaali näppäimistö, jota käyttäjä voi hyödynt
 ## Aikakatkaisu credit ja debit ikkunoihin
 QT sovellukseen lisätty aikakatkaisu, joka palaa kirjautumis sivulle, jos käyttäjä on inaktiivinen 30 sekunttia.
 
-## Projektin posteri
-<img width="248" alt="kuvakaappausposteri" src="https://github.com/user-attachments/assets/60ba9318-6c21-48f1-8818-6263f96feaf7" />
-
-
 ## Credit ikkunaan luotu valikko tapahtumille
 QT sovellukseen lisätty valikko StackedWidgetin avulla, josta käyttäjä voi valita noston, creditlimitin ja tilitapahtumat. 
 
 ## Nosto ikkuna luotu
 QT sovellukseen luotu näkymä, josta käyttäjä voi nostaa 20, 40, 50, 100 tai muun summan (10 euron tarkkuudella). Creditlimit päivittyy reaaliajassa, jokaisen noston yhteydessä. 
+
+## Projektin posteri
+<img width="248" alt="kuvakaappausposteri" src="https://github.com/user-attachments/assets/60ba9318-6c21-48f1-8818-6263f96feaf7" />
