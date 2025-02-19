@@ -99,6 +99,14 @@ router.post('/', async (req, res) => {
    // Päivitetään koko tili, mutta vain saldo on muuttunut
    await updateAccounts(req.pool, idaccounts, updatedAccountData);
 
+   const newTransaction = await addTransaction(req.pool, {
+
+    amount: amount,
+    idaccounts: idaccounts
+   });
+
+   res.json(newTransaction);
+
   } else if (account.type === 'debit') {
     // Tarkistetaan, onko tilillä tarpeeksi rahaa
     if (account.balance < amount) {
@@ -106,6 +114,8 @@ router.post('/', async (req, res) => {
         success: false,
         message: 'Insufficient balance for this withdrawal',
       });
+
+      
     }
 
    // Lasketaan uusi saldo
@@ -122,6 +132,14 @@ router.post('/', async (req, res) => {
 
    // Päivitetään koko tili, mutta vain saldo on muuttunut
    await updateAccounts(req.pool, idaccounts, updatedAccountData);
+
+   const newTransaction = await addTransaction(req.pool, {
+
+    amount: amount,
+    idaccounts: idaccounts
+   });
+
+   res.json(newTransaction);
     }
   
 } catch (error) {
