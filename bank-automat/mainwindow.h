@@ -31,7 +31,7 @@ private:
     Ui::MainWindow *ui;
     int loginCounter = 0;
 
-    void lockCard();
+    void lockCard(int idcard);
 
 private slots:
     void showTime();

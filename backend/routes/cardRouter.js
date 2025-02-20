@@ -3,6 +3,7 @@ import { getAllCards, getCardById } from '../models/cardModel.js';
 import { createCard } from '../models/cardModel.js';
 import { updateCard } from '../models/cardModel.js';
 import { deleteCard } from '../models/cardModel.js';
+import { updateCardLocked } from '../models/cardModel.js';  // Import the model function
 const router = express.Router();
 
 // GET all cards
@@ -79,6 +80,24 @@ router.put('/:id', async (req, res) => {
     res.status(401).json({ success: false, error: error.message });
   }
 });
+
+// UPDATE only locked for login purposes
+
+router.put('/:id/lock', async (req, res) => {
+  try {
+    if (req.body.locked === undefined) {
+      return res.status(400).json({ success: false, error: "Locked status is required" });
+    }
+
+    const updatedCard = await updateCardLocked(req.pool, req.params.id, req.body.locked);
+
+    res.json({ success: true, data: updatedCard });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 
 // DELETE a card by ID
 

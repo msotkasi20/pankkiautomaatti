@@ -64,7 +64,7 @@ export async function encryptCardPin(cardpin) {
 
 export async function updateCard(pool, id, card){
     try {
-        const [rows] = await pool.query('UPDATE card SET type = ?, cardpin = ? WHERE idcard = ?', [card.type, card.cardpin, id]);
+        const [rows] = await pool.query('UPDATE card SET type = ?, cardpin = ?, locked = ? WHERE idcard = ?', [card.type, card.cardpin, card.locked, id]);
         if (rows.length === 0) {
             throw new Error('Card not found');
 
@@ -74,6 +74,24 @@ export async function updateCard(pool, id, card){
         throw new Error(`Database error: ${error.message}`);
     }
 }
+
+export async function updateCardLocked(pool, id, locked) {
+    try {
+        const [result] = await pool.query(
+            'UPDATE card SET locked = ? WHERE idcard = ?',
+            [locked, id]
+        );
+
+        if (result.affectedRows === 0) {
+            throw new Error('Card not found');
+        }
+
+        return { success: true, affectedRows: result.affectedRows };
+    } catch (error) {
+        throw new Error(`Database error: ${error.message}`);
+    }
+}
+
 
 export async function deleteCard(pool, id){
     try{
