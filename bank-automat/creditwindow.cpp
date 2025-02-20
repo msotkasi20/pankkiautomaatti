@@ -90,7 +90,7 @@ void creditwindow::updatebalancedisplay()
 void creditwindow::creditWithdraw(int amount)
 {
 
-    if (amount % 10 == 0){
+    if (amount % 10 == 0 && amount <= creditlimit){
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QUrl url(QString("http://localhost:3000/transaction"));
     QNetworkRequest request(url);
@@ -109,9 +109,13 @@ void creditwindow::creditWithdraw(int amount)
 
      QTimer::singleShot(500, this, &creditwindow::fetchCreditAccount);
 
-    } else {
+    } else if (amount % 10 != 0){
         QMessageBox nostoError;
         nostoError.setText("Nostettava summa kymmenen euron tarkkuudella");
+        nostoError.exec();
+    } else if (amount > creditlimit){
+        QMessageBox nostoError;
+        nostoError.setText("Luottoraja ylittyy, nostoa ei voida suorittaa");
         nostoError.exec();
     }
 

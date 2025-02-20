@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->dateTime->setText(datetimetext);
 
     ui->username->installEventFilter(this);
-    ui->cardpin->installEventFilter(this);
+    ui->cardpin->installEventFilter(this);   
 
 }
 
@@ -54,6 +54,13 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
     return QMainWindow::eventFilter(obj, event);
 }
 
+void MainWindow::lockCard()
+{
+// Lukitaan login 30s ajaksi
+
+
+}
+
 void MainWindow::showTime()
 {
     QTime time = QTime::currentTime();
@@ -63,6 +70,7 @@ void MainWindow::showTime()
 
 void MainWindow::on_loginBtn_clicked()
 {
+
     QString idcard = ui->username->text();
     QString cardpin = ui->cardpin->text();
 
@@ -92,6 +100,7 @@ void MainWindow::on_loginBtn_clicked()
             // Parse the JSON response
             QJsonDocument responseDoc = QJsonDocument::fromJson(reply->readAll());
             QJsonObject responseObj = responseDoc.object();
+            qDebug() << "Full JSON Response:" << responseDoc.toJson();
 
             bool success = responseObj.value("success").toBool();
             if (success) {
@@ -155,11 +164,28 @@ void MainWindow::on_loginBtn_clicked()
                     cardReply->deleteLater();
                 });
             } else {
-                QMessageBox::warning(this, "Login Failed", responseObj.value("message").toString());
+                // QMessageBox::warning(this, "Login Failed", responseObj.value("message").toString());
             }
         } else {
             QMessageBox::critical(this, "Network Error", "Login request failed: " + reply->errorString());
+            int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            qDebug() << "HTTP Status Code:" << statusCode;
+
+            if (statusCode == 401) {
+                QMessageBox::warning(this, "Login Failed", "Invalid PIN");
+
+                // Increase loginCounter
+                 loginCounter++;
+                qDebug() << "Login counter:" << loginCounter;
+
+                // Lock card if 3 failed attempts
+                if (loginCounter >= 3) {
+                    lockCard();
+                    qDebug() << "Card locked due to multiple failed logins";
+                }
+            }
         }
+
         reply->deleteLater();
 
     });
