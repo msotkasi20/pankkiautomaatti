@@ -29,6 +29,9 @@ protected:
 
 private:
     Ui::MainWindow *ui;
+    int loginCounter = 0;
+
+    void lockCard();
 
 private slots:
     void showTime();

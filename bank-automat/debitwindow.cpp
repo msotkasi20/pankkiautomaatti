@@ -90,7 +90,7 @@ void debitwindow::updatebalancedisplay()
 void debitwindow::debitWithdraw(int amount)
 {
 
-    if (amount % 10 == 0){
+    if (amount % 10 == 0 && amount <= balance){
         QNetworkAccessManager *manager = new QNetworkAccessManager(this);
         QUrl url(QString("http://localhost:3000/transaction"));
         QNetworkRequest request(url);
@@ -109,9 +109,13 @@ void debitwindow::debitWithdraw(int amount)
 
         QTimer::singleShot(500, this, &debitwindow::fetchDebitAccount);
 
-    } else {
+    } else if (amount % 10 != 0){
         QMessageBox nostoError;
         nostoError.setText("Nostettava summa kymmenen euron tarkkuudella");
+        nostoError.exec();
+    } else if (amount > balance){
+        QMessageBox nostoError;
+        nostoError.setText("Tilin saldo ylittyy, nostoa ei voida suorittaa");
         nostoError.exec();
     }
 
