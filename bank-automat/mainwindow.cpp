@@ -54,12 +54,51 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
     return QMainWindow::eventFilter(obj, event);
 }
 
-void MainWindow::lockCard()
+void MainWindow::lockCard(int idcard)
 {
-// Lukitaan login 30s ajaksi
+    qDebug() << "Lukitusfunktio kutsuttu cardid: " << idcard;
 
+    // Create network manager
+    QNetworkAccessManager *managerForCard = new QNetworkAccessManager(this);
 
+    // Define URL with card ID
+    QUrl cardUrl(QString("http://localhost:3000/card/%1/lock").arg(idcard));
+    QNetworkRequest cardRequest(cardUrl);
+    cardRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    // Prepare the JSON payload
+    QJsonObject payload;
+    payload["locked"] = 1;  // Ensure only 'locked' field is sent
+    QJsonDocument jsonDoc(payload);
+    QByteArray requestData = jsonDoc.toJson();  // Convert to QByteArray
+
+    // Send PUT request with JSON body
+    QNetworkReply *cardReply = managerForCard->put(cardRequest, requestData);
+
+    // Handle response asynchronously
+    connect(cardReply, &QNetworkReply::finished, this, [cardReply]() {
+        if (cardReply->error() == QNetworkReply::NoError) {
+            QByteArray cardResponse = cardReply->readAll();
+            QJsonDocument cardResponseDoc = QJsonDocument::fromJson(cardResponse);
+            QJsonObject cardResponseObj = cardResponseDoc.object();
+
+            // Debugging response
+            if (cardResponseObj.contains("data")) {
+                QJsonObject dataObj = cardResponseObj.value("data").toObject();
+                qDebug() << "Card locked successfully:" << dataObj;
+            } else {
+                qDebug() << "Unexpected response:" << cardResponseObj;
+            }
+        } else {
+            qDebug() << "Error locking card:" << cardReply->errorString();
+        }
+
+        // Cleanup memory
+        cardReply->deleteLater();
+    });
 }
+
+
 
 void MainWindow::showTime()
 {
@@ -180,8 +219,9 @@ void MainWindow::on_loginBtn_clicked()
 
                 // Lock card if 3 failed attempts
                 if (loginCounter >= 3) {
-                    lockCard();
-                    qDebug() << "Card locked due to multiple failed logins";
+                    int idcardInt = idcard.toInt();
+                    lockCard(idcardInt);
+                    qDebug() << "Lukittava kortti:" << idcardInt;
                 }
             }
         }

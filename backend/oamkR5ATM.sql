@@ -42,6 +42,7 @@ CREATE TABLE `card` (
   `idcard` INT NOT NULL AUTO_INCREMENT,
   `type` ENUM('debit', 'credit', 'dual') NOT NULL,
   `cardpin` VARCHAR(255) NULL,
+  `locked` TINYINT(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`idcard`)
 ) ENGINE = InnoDB;
 
