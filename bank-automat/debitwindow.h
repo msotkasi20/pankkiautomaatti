@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QPushButton>
 #include <QWidget>
+#include <QStandardItemModel>
 #include "keyboard.h"
 
 class keyboard;
@@ -43,6 +44,10 @@ private:
     void resetInactivityTimer();
     void closeDueToInactivity();
 
+    QList<QPair<QString, QString>> allTransactions;
+    int currentPage = 0;   // Tracks the current page number
+    int rowsPerPage = 10;  // Defines how many rows per page
+
 
 
 protected:
@@ -54,6 +59,9 @@ private slots:
     void showPage2();
     void showPage3();
     void logOut();
+    void updateTableView();
+    void nextPage();
+    void prevPage();
 };
 
 #endif // DEBITWINDOW_H

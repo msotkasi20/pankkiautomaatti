@@ -236,6 +236,32 @@
     </widget>
    </widget>
   </widget>
+  <widget class="QPushButton" name="prevButton">
+   <property name="geometry">
+    <rect>
+     <x>410</x>
+     <y>410</y>
+     <width>100</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Edellinen</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="nextButton">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>410</y>
+     <width>100</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Seuraava</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
