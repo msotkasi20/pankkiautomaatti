@@ -25,8 +25,15 @@
     </property>
     <property name="font">
      <font>
+      <family>Arial</family>
       <pointsize>10</pointsize>
+      <bold>true</bold>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
     </property>
     <property name="text">
      <string>Kirjaudu</string>
@@ -43,9 +50,15 @@
     </property>
     <property name="font">
      <font>
-      <family>Ebrima</family>
+      <family>Arial</family>
       <pointsize>16</pointsize>
+      <bold>true</bold>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+color: white;
+</string>
     </property>
     <property name="text">
      <string>Tervetuloa!</string>
@@ -60,6 +73,31 @@
       <height>28</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLineEdit {
+    background-color: rgb(47, 117, 168);
+    color: white;
+    border: none;  /* Ei reunaa normaalissa tilassa */
+}
+
+QLineEdit:focus {
+    background-color: rgb(47, 117, 168);  /* Kenttä pysyy samassa värissä */
+    border: 2px solid rgb(124, 209, 255);  /* Sininen reunus, kun kenttä on valittu */
+    cursor: IBeam;  /* Asettaa tekstikursorin kenttään */
+}
+
+
+
+</string>
+    </property>
+    <property name="frame">
+     <bool>false</bool>
+    </property>
    </widget>
    <widget class="QLineEdit" name="cardpin">
     <property name="geometry">
@@ -70,8 +108,39 @@
       <height>28</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Arial</family>
+     </font>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::FocusPolicy::StrongFocus</enum>
+    </property>
     <property name="styleSheet">
-     <string notr="true"/>
+     <string notr="true">QLineEdit {
+    background-color: rgb(47, 117, 168);
+    color: white;
+    border: none;  /* Ei reunaa normaalissa tilassa */
+}
+
+QLineEdit:focus {
+    background-color: rgb(47, 117, 168);  /* Kenttä pysyy samassa värissä */
+    border: 2px solid rgb(124, 209, 255);  /* Sininen reunus, kun kenttä on valittu */
+    cursor: IBeam;  /* Asettaa tekstikursorin kenttään */
+}
+
+
+
+</string>
+    </property>
+    <property name="frame">
+     <bool>false</bool>
+    </property>
+    <property name="echoMode">
+     <enum>QLineEdit::EchoMode::Password</enum>
+    </property>
+    <property name="cursorMoveStyle">
+     <enum>Qt::CursorMoveStyle::VisualMoveStyle</enum>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -101,8 +170,14 @@
     </property>
     <property name="font">
      <font>
-      <family>Ebrima</family>
+      <family>Arial</family>
+      <bold>true</bold>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+color: white;
+</string>
     </property>
     <property name="text">
      <string>Pin koodi</string>
@@ -119,8 +194,14 @@
     </property>
     <property name="font">
      <font>
-      <family>Ebrima</family>
+      <family>Arial</family>
+      <bold>true</bold>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+color: white;
+</string>
     </property>
     <property name="text">
      <string>Kortin numero</string>
@@ -178,7 +259,7 @@
      <x>0</x>
      <y>0</y>
      <width>812</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>

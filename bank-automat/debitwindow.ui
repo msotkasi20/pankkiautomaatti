@@ -25,6 +25,17 @@
      <height>20</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>12</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: transparent;
+color: white;</string>
+   </property>
    <property name="text">
     <string>Debit account</string>
    </property>
@@ -40,8 +51,13 @@
    </property>
    <property name="font">
     <font>
-     <family>Ebrima</family>
+     <family>Arial</family>
+     <bold>true</bold>
     </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: transparent;
+color: white;</string>
    </property>
    <property name="text">
     <string>Clock</string>
@@ -58,8 +74,13 @@
    </property>
    <property name="font">
     <font>
-     <family>Ebrima</family>
+     <family>Arial</family>
+     <bold>true</bold>
     </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: transparent;
+color: white;</string>
    </property>
    <property name="text">
     <string>Date</string>
@@ -68,15 +89,30 @@
   <widget class="QWidget" name="actionsWidget" native="true">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>190</y>
+     <x>60</x>
+     <y>200</y>
      <width>161</width>
      <height>181</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background: transparent</string>
+   </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QPushButton" name="nostoBtn">
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+      </property>
       <property name="text">
        <string>Nosto</string>
       </property>
@@ -84,6 +120,18 @@
     </item>
     <item>
      <widget class="QPushButton" name="balanceBtn">
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+      </property>
       <property name="text">
        <string>Näytä saldo</string>
       </property>
@@ -91,6 +139,18 @@
     </item>
     <item>
      <widget class="QPushButton" name="tilitapahtumatBtn">
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+      </property>
       <property name="text">
        <string>Tilitapahtumat</string>
       </property>
@@ -98,6 +158,18 @@
     </item>
     <item>
      <widget class="QPushButton" name="logoutBtn">
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+      </property>
       <property name="text">
        <string>Kirjaudu ulos</string>
       </property>
@@ -106,16 +178,35 @@
    </layout>
   </widget>
   <widget class="QStackedWidget" name="stackedWidget">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
-     <x>390</x>
-     <y>140</y>
-     <width>321</width>
+     <x>320</x>
+     <y>150</y>
+     <width>341</width>
      <height>261</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+    </font>
+   </property>
    <property name="styleSheet">
-    <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 255));</string>
+    <string notr="true">QStackedWidget, QStackedWidget QWidget {
+    background: none;
+    background-image: none;
+    background-color: rgb(14, 74, 110);
+}
+
+QStackedWidget {
+    border: 2px solid white;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5), 
+                -4px -4px 10px rgba(255, 255, 255, 0.6);
+}
+</string>
    </property>
    <property name="currentIndex">
     <number>3</number>
@@ -133,6 +224,17 @@
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
        <widget class="QPushButton" name="kakskytBtn">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+        </property>
         <property name="text">
          <string>20</string>
         </property>
@@ -140,6 +242,17 @@
       </item>
       <item>
        <widget class="QPushButton" name="nelkytBtn">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+        </property>
         <property name="text">
          <string>40</string>
         </property>
@@ -147,6 +260,17 @@
       </item>
       <item>
        <widget class="QPushButton" name="viiskytBtn">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+        </property>
         <property name="text">
          <string>50</string>
         </property>
@@ -154,6 +278,17 @@
       </item>
       <item>
        <widget class="QPushButton" name="sataBtn">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+        </property>
         <property name="text">
          <string>100</string>
         </property>
@@ -161,6 +296,17 @@
       </item>
       <item>
        <widget class="QPushButton" name="muuBtn">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+        </property>
         <property name="text">
          <string>Muu</string>
         </property>
@@ -177,6 +323,17 @@
        <height>29</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+     </property>
      <property name="text">
       <string>Nosta</string>
      </property>
@@ -190,6 +347,11 @@
        <height>28</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+     </property>
     </widget>
     <widget class="QLabel" name="uusiBalance">
      <property name="geometry">
@@ -200,12 +362,51 @@
        <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background: transparent;
+color: white;</string>
+     </property>
      <property name="text">
       <string/>
      </property>
     </widget>
    </widget>
-   <widget class="QTableView" name="tilitapahtumatView"/>
+   <widget class="QTableView" name="tilitapahtumatView">
+    <property name="styleSheet">
+     <string notr="true">QHeaderView::section {
+    background-color: rgb(26, 106, 159);;
+    color: white;
+    padding: 5px;
+    border: 1px solid white;
+}
+
+QTableView QHeaderView::section {
+    background-color: rgb(26, 106, 159);;
+    color: white;
+    padding: 5px;
+    border: 1px solid white;
+}
+
+QTableCornerButton::section {
+    background-color:rgb(26, 106, 159);;
+    border: 1px solid white;
+}
+
+QTableView {
+    background-color: rgb(14, 74, 110);;
+    color: white;
+    gridline-color: white;
+}
+
+</string>
+    </property>
+   </widget>
    <widget class="QWidget" name="page_3"/>
    <widget class="QWidget" name="page_2">
     <widget class="QWidget" name="horizontalLayoutWidget">
@@ -220,6 +421,17 @@
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QLabel" name="label_3">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+        </property>
         <property name="text">
          <string>Saldo:</string>
         </property>
@@ -227,6 +439,17 @@
       </item>
       <item>
        <widget class="QLabel" name="balance">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -239,11 +462,22 @@
   <widget class="QPushButton" name="prevButton">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>410</y>
+     <x>340</x>
+     <y>420</y>
      <width>100</width>
      <height>32</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
    </property>
    <property name="text">
     <string>Edellinen</string>
@@ -252,11 +486,22 @@
   <widget class="QPushButton" name="nextButton">
    <property name="geometry">
     <rect>
-     <x>590</x>
-     <y>410</y>
+     <x>540</x>
+     <y>420</y>
      <width>100</width>
      <height>32</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
    </property>
    <property name="text">
     <string>Seuraava</string>
