@@ -206,7 +206,7 @@ void MainWindow::on_loginBtn_clicked()
                 // QMessageBox::warning(this, "Login Failed", responseObj.value("message").toString());
             }
         } else {
-            QMessageBox::critical(this, "Network Error", "Login request failed: " + reply->errorString());
+            // QMessageBox::critical(this, "Network Error", "Loginxrequest failed: " + reply->errorString());
             int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
             qDebug() << "HTTP Status Code:" << statusCode;
 
