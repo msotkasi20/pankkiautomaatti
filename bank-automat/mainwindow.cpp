@@ -223,6 +223,8 @@ void MainWindow::on_loginBtn_clicked()
                     lockCard(idcardInt);
                     qDebug() << "Lukittava kortti:" << idcardInt;
                 }
+            } else if (statusCode == 403) {
+                QMessageBox::critical(this, "Card Locked", "Your cards is locked. Please contact customer support");
             }
         }
 

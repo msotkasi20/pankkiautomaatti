@@ -20,6 +20,14 @@ router.post('/', async (req, res) => {
     const card = await getCardById(req.pool, idcard);
 
     if (card) {
+
+      //Tarkistetaan onko kortti lukittu
+
+    if (card.locked) {
+      console.log("Card is locked");
+      return res.status(403).json({ success: false, message: "Card is locked" });
+    }
+
       // Vertaillaan bcryptillä tallennettua PIN-koodia
       const isMatch = await bcrypt.compare(cardpin, card.cardpin);
 
