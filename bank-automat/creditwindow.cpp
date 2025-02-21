@@ -53,6 +53,9 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
     connect(ui->tilitapahtumatBtn, &QPushButton::clicked, this, &creditwindow::showPage2);
     connect(ui->tilitapahtumatBtn, &QPushButton::clicked, this, &creditwindow::fetchTransactions);
 
+    connect(ui->nextButton, &QPushButton::clicked, this, &creditwindow::nextPage);
+    connect(ui->prevButton, &QPushButton::clicked, this, &creditwindow::prevPage);
+
     connect(ui->creditlimitBtn, &QPushButton::clicked, this, &creditwindow::showPage3);
     connect(ui->logoutBtn, &QPushButton::clicked, this, &creditwindow::logOut);
 
@@ -184,28 +187,21 @@ void creditwindow::fetchCreditAccount()
 
 void creditwindow::fetchTransactions()
 {
-    qDebug() << idaccount;
+    qDebug() << "Fetching transactions for account ID: " << idaccount;
     QUrl url(QString("http://localhost:3000/transaction/byAccountId/%1").arg(idaccount));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QNetworkReply *reply = networkManager->get(request);
 
-
-
-    connect(reply, &QNetworkReply::finished, this, [reply, this](){
-
-        if (reply->error() == QNetworkReply::NoError){
-            //Parse the JSON response
+    connect(reply, &QNetworkReply::finished, this, [reply, this]() {
+        if (reply->error() == QNetworkReply::NoError) {
             QByteArray responseData = reply->readAll();
             QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
             QJsonObject jsonObj = jsonDoc.object();
 
-            qDebug() << "Full JSON response: " << jsonDoc.toJson(QJsonDocument::Indented);
-
             bool success = jsonObj.value("success").toBool();
             if (success) {
-                // Tarkistetaan että "data" on array
                 if (!jsonObj.contains("data") || !jsonObj["data"].isArray()) {
                     qDebug() << "Error: 'data' field is missing or is not an array.";
                     return;
@@ -217,39 +213,85 @@ void creditwindow::fetchTransactions()
                     return;
                 }
 
-                QStandardItemModel *transactionModel = new QStandardItemModel(this);
-                transactionModel->setHorizontalHeaderLabels({"Määrä", "Päivämäärä"});
-
-                for (int i = dataArray.size() - 1; i >= 0; --i) {
-                    QJsonValue value = dataArray[i];
+                // Store transactions in memory
+                allTransactions.clear();
+                for (const auto &value : dataArray) {
                     if (value.isObject()) {
                         QJsonObject transaction = value.toObject();
-
                         double amount = transaction["amount"].toDouble();
                         QString date = transaction["actiontimestamp"].toString();
-
-                        QList<QStandardItem *> rowItems;
-                        rowItems.append(new QStandardItem(QString::number(amount, 'f', 2)));
-                        rowItems.append(new QStandardItem(date));
-
-                        transactionModel->appendRow(rowItems);
-
+                        allTransactions.append({QString::number(amount, 'f', 2), date});
                     }
                 }
-                QTableView *tableView = qobject_cast<QTableView *>(ui->tilitapahtumatView);
-                if(tableView) {
-                    tableView->setModel(transactionModel);
 
-                    tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-                }
+                //Reverse the list to show newest transactions first
+                std::reverse(allTransactions.begin(), allTransactions.end());
+
+                // Reset pagination
+                currentPage = 0;
+                updateTableView();
             } else {
                 qDebug() << "Error: Transaction fetch failed.";
-
             }
             reply->deleteLater();
         }
-     });
+    });
 }
+
+void creditwindow::updateTableView()
+{
+    if (allTransactions.isEmpty()) {
+        qDebug() << "No transactions available to display.";
+        return;
+    }
+
+    QTableView *tableView = qobject_cast<QTableView *>(ui->tilitapahtumatView);
+    if (!tableView) return;
+
+    QStandardItemModel *transactionModel = new QStandardItemModel(this);
+    transactionModel->setHorizontalHeaderLabels({"Määrä", "Päivämäärä"});
+
+    int startRow = currentPage * rowsPerPage;
+    int endRow = qMin(startRow + rowsPerPage, allTransactions.size());
+
+    // Only show the transactions relevant to the current page
+    for (int i = startRow; i < endRow; ++i) {
+        QList<QStandardItem *> rowItems;
+        rowItems.append(new QStandardItem(allTransactions[i].first));
+        rowItems.append(new QStandardItem(allTransactions[i].second));
+        transactionModel->appendRow(rowItems);
+    }
+
+    tableView->setModel(transactionModel);
+    tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    // Enable/Disable navigation buttons based on available pages
+    ui->prevButton->setEnabled(currentPage > 0);
+    ui->nextButton->setEnabled(endRow < allTransactions.size());
+}
+
+
+
+
+void creditwindow::nextPage()
+{
+    if ((currentPage + 1) * rowsPerPage < allTransactions.size()) {
+        currentPage++;
+        updateTableView();
+    }
+}
+
+void creditwindow::prevPage()
+{
+    if (currentPage > 0) {
+        currentPage--;
+        updateTableView();
+    }
+}
+
+
+
+
 
 
 
