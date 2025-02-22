@@ -15,6 +15,21 @@ keyboard::keyboard(QLineEdit *targetField, QWidget *parent)
         QPushButton *button = new QPushButton(key, this);
         button->setFocusPolicy(Qt::NoFocus);
         connect(button, &QPushButton::clicked, this, &keyboard::keyPressed);
+
+        button->setStyleSheet("QPushButton { "
+                              "color: white; "  // Tekstin väri
+                              "background-color: rgb(47, 117, 168); "  // Taustaväri
+                              "border: none; "  // Ei reunoja
+                              "font-weight: bold; "  // Fontti boldattuna
+                              "} "
+                              "QPushButton:hover { "
+                              "background-color: rgb(124, 209, 255); "  // Hover-tilassa vaaleampi sininen
+                              "} "
+                              "QPushButton:pressed { "
+                              "background-color: rgb(14, 74, 110); "  // Painettu tila, tummempi sininen
+                              "}");
+
+
         layout->addWidget(button, row, col);
         col++;
         if (col >2) {col = 0, row++; }

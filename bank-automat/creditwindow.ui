@@ -27,12 +27,13 @@
    </property>
    <property name="font">
     <font>
-     <family>Ebrima</family>
+     <family>Arial</family>
+     <bold>true</bold>
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(255, 255, 255);
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 255));</string>
+    <string notr="true">background: transparent;
+color: white;</string>
    </property>
    <property name="text">
     <string>Clock</string>
@@ -49,8 +50,13 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
    </property>
    <property name="font">
     <font>
-     <family>Ebrima</family>
+     <family>Arial</family>
+     <bold>true</bold>
     </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: transparent;
+color: white;</string>
    </property>
    <property name="text">
     <string>Date</string>
@@ -65,6 +71,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
      <height>20</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>12</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background: transparent;
+color: white;</string>
+   </property>
    <property name="text">
     <string>Credit account</string>
    </property>
@@ -78,9 +95,24 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
      <height>181</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background: transparent</string>
+   </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QPushButton" name="nostoBtn">
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+      </property>
       <property name="text">
        <string>Nosto</string>
       </property>
@@ -88,6 +120,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
     </item>
     <item>
      <widget class="QPushButton" name="creditlimitBtn">
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:rgb(47, 117, 168);
+color: white;</string>
+      </property>
       <property name="text">
        <string>Näytä luottoraja</string>
       </property>
@@ -95,6 +138,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
     </item>
     <item>
      <widget class="QPushButton" name="tilitapahtumatBtn">
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:rgb(47, 117, 168);
+color: white;</string>
+      </property>
       <property name="text">
        <string>Tilitapahtumat</string>
       </property>
@@ -102,6 +156,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
     </item>
     <item>
      <widget class="QPushButton" name="logoutBtn">
+      <property name="font">
+       <font>
+        <family>Arial</family>
+        <pointsize>10</pointsize>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color:rgb(47, 117, 168);
+color: white;</string>
+      </property>
       <property name="text">
        <string>Kirjaudu ulos</string>
       </property>
@@ -112,19 +177,45 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
   <widget class="QStackedWidget" name="stackedWidget">
    <property name="geometry">
     <rect>
-     <x>340</x>
+     <x>320</x>
      <y>150</y>
-     <width>321</width>
+     <width>341</width>
      <height>261</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(255, 255, 255, 255));</string>
+    <string notr="true">QStackedWidget, QStackedWidget QWidget {
+    background: none;
+    background-image: none;
+    background-color: rgb(14, 74, 110);
+}
+
+QStackedWidget {
+    border: 2px solid white;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5), 
+                -4px -4px 10px rgba(255, 255, 255, 0.6);
+}
+
+
+</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Shape::Panel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Shadow::Raised</enum>
+   </property>
+   <property name="lineWidth">
+    <number>5</number>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="page">
+    <property name="styleSheet">
+     <string notr="true">background-color:rgb(14, 74, 110);
+color: white;</string>
+    </property>
     <widget class="QWidget" name="verticalLayoutWidget">
      <property name="geometry">
       <rect>
@@ -137,6 +228,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
        <widget class="QPushButton" name="kakskytBtn">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+        </property>
         <property name="text">
          <string>20</string>
         </property>
@@ -144,6 +246,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
       </item>
       <item>
        <widget class="QPushButton" name="nelkytBtn">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+        </property>
         <property name="text">
          <string>40</string>
         </property>
@@ -151,6 +264,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
       </item>
       <item>
        <widget class="QPushButton" name="viiskytBtn">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+        </property>
         <property name="text">
          <string>50</string>
         </property>
@@ -158,6 +282,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
       </item>
       <item>
        <widget class="QPushButton" name="sataBtn">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+        </property>
         <property name="text">
          <string>100</string>
         </property>
@@ -165,6 +300,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
       </item>
       <item>
        <widget class="QPushButton" name="muuBtn">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+        </property>
         <property name="text">
          <string>Muu</string>
         </property>
@@ -181,6 +327,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
        <height>29</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+     </property>
      <property name="text">
       <string>Nosta</string>
      </property>
@@ -194,6 +351,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
        <height>28</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:rgb(47, 117, 168);
+color: white;
+</string>
+     </property>
     </widget>
     <widget class="QLabel" name="uusicreditlimit">
      <property name="geometry">
@@ -204,12 +372,60 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
        <height>31</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:rgb(14, 74, 110);
+color: white;
+</string>
+     </property>
      <property name="text">
       <string/>
      </property>
     </widget>
    </widget>
-   <widget class="QTableView" name="tilitapahtumatView"/>
+   <widget class="QTableView" name="tilitapahtumatView">
+    <property name="font">
+     <font>
+      <family>Arial</family>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QHeaderView::section {
+    background-color: rgb(26, 106, 159);;
+    color: white;
+    padding: 5px;
+    border: 1px solid white;
+}
+
+QTableView QHeaderView::section {
+    background-color: rgb(26, 106, 159);;
+    color: white;
+    padding: 5px;
+    border: 1px solid white;
+}
+
+QTableCornerButton::section {
+    background-color:rgb(26, 106, 159);;
+    border: 1px solid white;
+}
+
+QTableView {
+    background-color: rgb(14, 74, 110);;
+    color: white;
+    gridline-color: white;
+}
+
+</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::Shape::NoFrame</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Shadow::Plain</enum>
+    </property>
+    <property name="showDropIndicator" stdset="0">
+     <bool>false</bool>
+    </property>
+   </widget>
    <widget class="QWidget" name="page_3"/>
    <widget class="QWidget" name="page_2">
     <widget class="QWidget" name="horizontalLayoutWidget">
@@ -224,6 +440,17 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QLabel" name="label_2">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <pointsize>9</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(47, 117, 168);
+color: white;</string>
+        </property>
         <property name="text">
          <string>Credit limit:</string>
         </property>
@@ -231,6 +458,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
       </item>
       <item>
        <widget class="QLabel" name="creditlimit">
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color:rgb(47, 117, 168);
+color: white;</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -243,11 +480,22 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
   <widget class="QPushButton" name="prevButton">
    <property name="geometry">
     <rect>
-     <x>360</x>
+     <x>340</x>
      <y>420</y>
      <width>100</width>
      <height>32</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>9</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgb(47, 117, 168);
+color: white;</string>
    </property>
    <property name="text">
     <string>Edellinen</string>
@@ -261,6 +509,16 @@ background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgb
      <width>100</width>
      <height>32</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color:rgb(47, 117, 168);
+color: white;</string>
    </property>
    <property name="text">
     <string>Seuraava</string>
