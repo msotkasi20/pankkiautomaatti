@@ -14,7 +14,6 @@ export async function getCardById(pool, id) {
         const [rows] = await pool.query('SELECT * FROM card WHERE idcard = ?', [id]);
         if (rows.length === 0) {
             throw new Error('Card not found');
-
         }
         return rows[0];  
     } catch (error) {
@@ -34,40 +33,37 @@ export async function encryptCardPin(cardpin) {
 
     // Luodaan kortti tietokantaan, PIN-koodin kryptaus
     
-    export async function createCard(pool, card) {
-        try {
-          console.log("Received card object:", card); // Loggaa kortin tiedot
+export async function createCard(pool, card) {
+    try {
+        console.log("Received card object:", card); // Loggaa kortin tiedot
       
-          if (!card.cardpin) {
+        if (!card.cardpin) {
             throw new Error('PIN is missing');
-          }
+        }
           
-          const pinAsString = String(card.cardpin);
+        const pinAsString = String(card.cardpin);
       
-          // Kryptataan PIN ennen tallentamista
-          const hashedPin = await encryptCardPin(pinAsString);
+        // Kryptataan PIN ennen tallentamista
+        const hashedPin = await encryptCardPin(pinAsString);
       
-          // Lisää uusi kortti ilman id:tä
-          const [rows] = await pool.query(
+        // Lisää uusi kortti ilman id:tä
+        const [rows] = await pool.query(
             'INSERT INTO card (type, cardpin) VALUES (?, ?)',
             [card.type, hashedPin]
-          );
+        );
       
-          // Palautetaan luodun kortin tiedot
-          return { idcard: rows.insertId, type: card.type };
+        // Palautetaan luodun kortin tiedot
+        return { idcard: rows.insertId, type: card.type };
         } catch (error) {
           throw new Error(`Database error: ${error.message}`);
         }
       }
       
-      
-
 export async function updateCard(pool, id, card){
     try {
         const [rows] = await pool.query('UPDATE card SET type = ?, cardpin = ?, locked = ? WHERE idcard = ?', [card.type, card.cardpin, card.locked, id]);
         if (rows.length === 0) {
             throw new Error('Card not found');
-
         }
         return rows[0];
     } catch (error){
@@ -98,7 +94,6 @@ export async function deleteCard(pool, id){
         const [rows] = await pool.query('DELETE FROM card WHERE idcard = ?', [id]);
         if (rows.length === 0) {
             throw new Error('Card not found');
-
         }
         return rows[0];
     } catch (error){

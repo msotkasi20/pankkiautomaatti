@@ -40,13 +40,11 @@ export async function getAlltransaction(pool) {
       );
       return { id: result.insertId, ...transactionData };
     } catch (error) {
-      throw new Error(`Database error: ${error.message}`);
-      
+      throw new Error(`Database error: ${error.message}`);  
     }
   }
 
   export async function updateTransaction(pool, id, transactionData) {
-
     try {
       const [result]= await pool.query(
         'UPDATE transaction SET idaccounts = ?, amount = ?, action = ?, actiontimestamp = ? WHERE idtransaction = ?',
@@ -58,9 +56,7 @@ export async function getAlltransaction(pool) {
       return {id, ...transactionData};
     } catch (error) {
       throw new Error (`Database error: ${error.message}`);
-      
     }
-    
   }
 
   export async function deleteTransaction(pool, id) {
@@ -72,9 +68,5 @@ export async function getAlltransaction(pool) {
       return {message: 'Transaction deleted succesfully'};
     } catch (error) {
       throw new Error(`Database error: ${error.message}`);
-      
     }
   }
-
-
-  

@@ -13,10 +13,6 @@
 #include <QInputDialog>
 #include <QMessageBox>
 
-
-
-
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -33,7 +29,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->username->installEventFilter(this);
     ui->cardpin->installEventFilter(this);   
-
 }
 
 MainWindow::~MainWindow()
@@ -58,31 +53,31 @@ void MainWindow::lockCard(int idcard)
 {
     qDebug() << "Lukitusfunktio kutsuttu cardid: " << idcard;
 
-    // Create network manager
+    // Luodaan network manager
     QNetworkAccessManager *managerForCard = new QNetworkAccessManager(this);
 
-    // Define URL with card ID
+    // Määritetään URL kortin ID:llä
     QUrl cardUrl(QString("http://localhost:3000/card/%1/lock").arg(idcard));
     QNetworkRequest cardRequest(cardUrl);
     cardRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-    // Prepare the JSON payload
+    // JSON payload
     QJsonObject payload;
-    payload["locked"] = 1;  // Ensure only 'locked' field is sent
+    payload["locked"] = 1;  // Varmistetaan että vain 'locked' kenttä lähetetään
     QJsonDocument jsonDoc(payload);
-    QByteArray requestData = jsonDoc.toJson();  // Convert to QByteArray
+    QByteArray requestData = jsonDoc.toJson();  // Muutetaan QByteArrayksi
 
-    // Send PUT request with JSON body
+    // Lähetetään PUT JSON bodyn mukana
     QNetworkReply *cardReply = managerForCard->put(cardRequest, requestData);
 
-    // Handle response asynchronously
+    // Käsitellään response asynkronisesti
     connect(cardReply, &QNetworkReply::finished, this, [cardReply]() {
         if (cardReply->error() == QNetworkReply::NoError) {
             QByteArray cardResponse = cardReply->readAll();
             QJsonDocument cardResponseDoc = QJsonDocument::fromJson(cardResponse);
             QJsonObject cardResponseObj = cardResponseDoc.object();
 
-            // Debugging response
+            // Debugataan response
             if (cardResponseObj.contains("data")) {
                 QJsonObject dataObj = cardResponseObj.value("data").toObject();
                 qDebug() << "Card locked successfully:" << dataObj;
@@ -93,12 +88,10 @@ void MainWindow::lockCard(int idcard)
             qDebug() << "Error locking card:" << cardReply->errorString();
         }
 
-        // Cleanup memory
+        // Muistin tyhjennys
         cardReply->deleteLater();
     });
 }
-
-
 
 void MainWindow::showTime()
 {
@@ -109,7 +102,6 @@ void MainWindow::showTime()
 
 void MainWindow::on_loginBtn_clicked()
 {
-
     QString idcard = ui->username->text();
     QString cardpin = ui->cardpin->text();
 
@@ -118,25 +110,25 @@ void MainWindow::on_loginBtn_clicked()
         return;
     }
 
-    // Prepare the network request
+    // Valmistellaan network request
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QUrl url("http://localhost:3000/login");
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-    //Prepare the JSON payload
+    //Valmistellaan JSON payload
     QJsonObject payload;
     payload["idcard"] = idcard;
     payload["cardpin"] = cardpin;
     QJsonDocument jsonDoc(payload);
 
-    // Send the POST request
+    // Lähetetään POST request
     QNetworkReply *reply = manager->post(request, jsonDoc.toJson());
 
-    // Connect to the reply signal for handling response
+    // Yhdistä reply-signaaliin vastauksen käsittelemiseksi
     connect(reply, &QNetworkReply::finished, this, [reply, this, idcard]() {
         if (reply->error() == QNetworkReply::NoError) {
-            // Parse the JSON response
+            // Parseroi JSON response
             QJsonDocument responseDoc = QJsonDocument::fromJson(reply->readAll());
             QJsonObject responseObj = responseDoc.object();
             qDebug() << "Full JSON Response:" << responseDoc.toJson();
@@ -213,11 +205,11 @@ void MainWindow::on_loginBtn_clicked()
             if (statusCode == 401) {
                 QMessageBox::warning(this, "Login Failed", "Invalid PIN");
 
-                // Increase loginCounter
+                // Kasvatetaan loginCounteria
                  loginCounter++;
                 qDebug() << "Login counter:" << loginCounter;
 
-                // Lock card if 3 failed attempts
+                // Lukitaan kortti jos 3 epäonnistunutta yritystä
                 if (loginCounter >= 3) {
                     int idcardInt = idcard.toInt();
                     lockCard(idcardInt);
@@ -229,9 +221,7 @@ void MainWindow::on_loginBtn_clicked()
         }
 
         reply->deleteLater();
-
     });
-
 }
 
 void MainWindow::showKeyboard(QLineEdit *targetField)
@@ -249,7 +239,3 @@ void MainWindow::showKeyboard(QLineEdit *targetField)
     virtualKeyboard->show();
     virtualKeyboard->raise();
 }
-
-
-
-

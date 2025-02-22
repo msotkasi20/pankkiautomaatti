@@ -13,7 +13,6 @@
 #include <QHeaderView>
 #include <QTableView>
 
-
 creditwindow::creditwindow(const QString &idcard, QWidget *parent)
     : QDialog(parent)
     , virtualKeyboard(nullptr)
@@ -27,7 +26,6 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
     qDebug() << "creditwindow created with idcard: " << idcard;
 
     ui->setupUi(this);
-
 
     virtualKeyboard = new keyboard(nullptr, this);
     virtualKeyboard->move(440,200);
@@ -76,8 +74,6 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
 
 }
 
-
-
 creditwindow::~creditwindow()
 {
     delete ui;
@@ -92,7 +88,6 @@ void creditwindow::updatebalancedisplay()
 
 void creditwindow::creditWithdraw(int amount)
 {
-
     if (amount % 10 == 0 && amount <= creditlimit){
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QUrl url(QString("http://localhost:3000/transaction"));
@@ -107,7 +102,6 @@ void creditwindow::creditWithdraw(int amount)
 
     QNetworkReply *reply = manager->post(request, jsonDoc.toJson());
 
-
     ui->uusicreditlimit->setText("Nostit: " + QString::number(amount));
 
      QTimer::singleShot(500, this, &creditwindow::fetchCreditAccount);
@@ -121,8 +115,6 @@ void creditwindow::creditWithdraw(int amount)
         nostoError.setText("Luottoraja ylittyy, nostoa ei voida suorittaa");
         nostoError.exec();
     }
-
-
 }
 
 void creditwindow::setSum(int amount)
@@ -224,10 +216,10 @@ void creditwindow::fetchTransactions()
                     }
                 }
 
-                //Reverse the list to show newest transactions first
+                // Käännettän listan järjestys viimeisin transactio ylimmäiseksi
                 std::reverse(allTransactions.begin(), allTransactions.end());
 
-                // Reset pagination
+                // Sivun nollaus
                 currentPage = 0;
                 updateTableView();
             } else {
@@ -254,7 +246,7 @@ void creditwindow::updateTableView()
     int startRow = currentPage * rowsPerPage;
     int endRow = qMin(startRow + rowsPerPage, allTransactions.size());
 
-    // Only show the transactions relevant to the current page
+    // Näytetään relevantti transactio
     for (int i = startRow; i < endRow; ++i) {
         QList<QStandardItem *> rowItems;
         rowItems.append(new QStandardItem(allTransactions[i].first));
@@ -265,13 +257,10 @@ void creditwindow::updateTableView()
     tableView->setModel(transactionModel);
     tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    // Enable/Disable navigation buttons based on available pages
+    // Enabloi/Disabloi navigaatio buttons käytettäville sivuille
     ui->prevButton->setEnabled(currentPage > 0);
     ui->nextButton->setEnabled(endRow < allTransactions.size());
 }
-
-
-
 
 void creditwindow::nextPage()
 {
@@ -289,12 +278,6 @@ void creditwindow::prevPage()
     }
 }
 
-
-
-
-
-
-
 void creditwindow::resetInactivityTimer()
 {
     inactivityTimer->start(); //Restarttaa ajastimen (30 sek)
@@ -310,7 +293,6 @@ void creditwindow::closeDueToInactivity()
     logout.exec();
 }
 
-
 bool creditwindow::eventFilter(QObject *obj, QEvent *event)
 {
     if(event->type() == QEvent::MouseMove || event->type() == QEvent::KeyPress) {        //Jos liikutetaan hiirtä tai painetaan näppäintä ajastin resettaa.
@@ -323,12 +305,9 @@ bool creditwindow::eventFilter(QObject *obj, QEvent *event)
         ui->nostoSumma->setFocus();
         virtualKeyboard->setTargetField(ui->nostoSumma);
         return true;
-
     }
 
     return QDialog::eventFilter(obj, event);
-
-
 }
 
 void creditwindow::showTime()
@@ -343,8 +322,6 @@ void creditwindow::showPage1()
     ui->stackedWidget->setCurrentIndex(0); //Näyttää "Nosto" sivun
 
     virtualKeyboard->show();
-
-
 }
 
 void creditwindow::showPage2()
@@ -352,7 +329,6 @@ void creditwindow::showPage2()
     ui->stackedWidget->setCurrentIndex(1);
 
     virtualKeyboard->close();
-
 }
 
 void creditwindow::showPage3()
@@ -360,8 +336,6 @@ void creditwindow::showPage3()
     ui->stackedWidget->setCurrentIndex(3);
 
     virtualKeyboard->close();
-
-
 }
 
 void creditwindow::logOut()
@@ -370,7 +344,3 @@ void creditwindow::logOut()
     qDebug() << "logoutBtn clicked.";
     close();
 }
-
-
-
-

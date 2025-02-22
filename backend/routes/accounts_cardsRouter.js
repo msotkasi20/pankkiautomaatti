@@ -14,7 +14,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// GET accounts by card ID and type
+// Hakee tilit kortin ID:n ja typen perusteella
 router.get('/by-card-and-type', async (req, res) => {
     const { idcard, type } = req.query;
     try {
