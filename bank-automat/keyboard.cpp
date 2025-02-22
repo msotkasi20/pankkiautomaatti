@@ -62,5 +62,3 @@ void keyboard::keyPressed()
         targetField->setText(targetField->text() + button->text()); //Asetetaan tekstikenttään napista painettu numero
     }
 }
-
-

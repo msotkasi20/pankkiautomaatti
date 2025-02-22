@@ -28,7 +28,6 @@ debitwindow::debitwindow(const QString &idcard, QWidget *parent)
 
     ui->setupUi(this);
 
-
     virtualKeyboard = new keyboard(nullptr, this);
     virtualKeyboard->move(440,200);
     virtualKeyboard->close();
@@ -72,11 +71,7 @@ debitwindow::debitwindow(const QString &idcard, QWidget *parent)
         debitWithdraw(amount);
         fetchTransactions();
     });
-
-
 }
-
-
 
 debitwindow::~debitwindow()
 {
@@ -92,7 +87,6 @@ void debitwindow::updatebalancedisplay()
 
 void debitwindow::debitWithdraw(int amount)
 {
-
     if (amount % 10 == 0 && amount <= balance){
         QNetworkAccessManager *manager = new QNetworkAccessManager(this);
         QUrl url(QString("http://localhost:3000/transaction"));
@@ -107,7 +101,6 @@ void debitwindow::debitWithdraw(int amount)
 
         QNetworkReply *reply = manager->post(request, jsonDoc.toJson());
 
-
         ui->uusiBalance->setText("Nostit: " + QString::number(amount));
 
         QTimer::singleShot(500, this, &debitwindow::fetchDebitAccount);
@@ -121,8 +114,6 @@ void debitwindow::debitWithdraw(int amount)
         nostoError.setText("Luottoraja ylittyy, nostoa ei voida suorittaa");
         nostoError.exec();
     }
-
-
 }
 
 void debitwindow::setSum(int amount)
@@ -213,7 +204,7 @@ void debitwindow::fetchTransactions()
                     return;
                 }
 
-                // Store transactions in memory
+                // Tallennetaan transactionsit
                 allTransactions.clear();
                 for (const auto &value : dataArray) {
                     if (value.isObject()) {
@@ -224,10 +215,10 @@ void debitwindow::fetchTransactions()
                     }
                 }
 
-                //Reverse the list to show newest transactions first
+                // Käännetään lista näyttämään uusin transaction ensin
                 std::reverse(allTransactions.begin(), allTransactions.end());
 
-                // Reset pagination
+                // Resetoidaan sivutus
                 currentPage = 0;
                 updateTableView();
             } else {
@@ -254,7 +245,7 @@ void debitwindow::updateTableView()
     int startRow = currentPage * rowsPerPage;
     int endRow = qMin(startRow + rowsPerPage, allTransactions.size());
 
-    // Only show the transactions relevant to the current page
+    // Näytetään sivulle relevantit transactionit
     for (int i = startRow; i < endRow; ++i) {
         QList<QStandardItem *> rowItems;
         rowItems.append(new QStandardItem(allTransactions[i].first));
@@ -269,9 +260,6 @@ void debitwindow::updateTableView()
     ui->prevButton->setEnabled(currentPage > 0);
     ui->nextButton->setEnabled(endRow < allTransactions.size());
 }
-
-
-
 
 void debitwindow::nextPage()
 {
@@ -289,12 +277,6 @@ void debitwindow::prevPage()
     }
 }
 
-
-
-
-
-
-
 void debitwindow::resetInactivityTimer()
 {
     inactivityTimer->start(); //Restarttaa ajastimen (30 sek)
@@ -310,7 +292,6 @@ void debitwindow::closeDueToInactivity()
     logout.exec();
 }
 
-
 bool debitwindow::eventFilter(QObject *obj, QEvent *event)
 {
     if(event->type() == QEvent::MouseMove || event->type() == QEvent::KeyPress) {        //Jos liikutetaan hiirtä tai painetaan näppäintä ajastin resettaa.
@@ -323,12 +304,9 @@ bool debitwindow::eventFilter(QObject *obj, QEvent *event)
         ui->nostoSumma->setFocus();
         virtualKeyboard->setTargetField(ui->nostoSumma);
         return true;
-
     }
 
     return QDialog::eventFilter(obj, event);
-
-
 }
 
 void debitwindow::showTime()
@@ -343,8 +321,6 @@ void debitwindow::showPage1()
     ui->stackedWidget->setCurrentIndex(0); //Näyttää "Nosto" sivun
 
     virtualKeyboard->show();
-
-
 }
 
 void debitwindow::showPage2()
@@ -352,7 +328,6 @@ void debitwindow::showPage2()
     ui->stackedWidget->setCurrentIndex(1);
 
     virtualKeyboard->close();
-
 }
 
 void debitwindow::showPage3()
@@ -360,8 +335,6 @@ void debitwindow::showPage3()
     ui->stackedWidget->setCurrentIndex(3);
 
     virtualKeyboard->close();
-
-
 }
 
 void debitwindow::logOut()
@@ -370,7 +343,3 @@ void debitwindow::logOut()
     qDebug() << "logoutBtn clicked.";
     close();
 }
-
-
-
-

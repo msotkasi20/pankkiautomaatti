@@ -11,11 +11,10 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load environment variables from .env file
+// Ladataan ympäristö muuttujat .env tiedostosta
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 const app = express();
@@ -26,9 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(path.resolve(), 'public')));
 
-
-
-// Database connection pool
+// Tietokanta connection pool
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -40,11 +37,11 @@ const pool = mysql.createPool({
 });
 
 app.use((req, res, next) => {
-  req.pool = pool; // Add the database pool to req object
+  req.pool = pool; // Lisätään tietokanta pool req. muuttujaan
   next();
 });
 
-// Routes
+// Routesit
 app.use('/customer', customerRouter);
 app.use('/accounts', accountsRouter);
 app.use('/card', cardRouter);
@@ -52,7 +49,7 @@ app.use('/transaction', transactionRouter);
 app.use('/login', loginRouter);
 app.use('/accounts_cards', accounts_cardsRouter);
 
-// Default error handler
+// Oletus virheenkäsittely
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');

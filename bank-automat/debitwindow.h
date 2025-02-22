@@ -48,8 +48,6 @@ private:
     int currentPage = 0;   // Tracks the current page number
     int rowsPerPage = 10;  // Defines how many rows per page
 
-
-
 protected:
     bool eventFilter(QObject *obj, QEvent *event) override;
 

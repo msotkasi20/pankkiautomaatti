@@ -61,28 +61,27 @@ router.post('/', async (req, res) => {
     });
   }
   
+  try {
+  // Haetaan tilin tiedot tarkistusta varten
+  console.log(`Haetaan tilin tiedot tarkistusta varten id:llä ${idaccounts}`);
+  const account = await getAccountsById(req.pool, idaccounts);
+  if (!account) {
+    return res.status(404).json({
+      success: false,
+      message: 'Account not found',
+    });
+  }
 
-    try {
-    // Haetaan tilin tiedot tarkistusta varten
-    console.log(`Haetaan tilin tiedot tarkistusta varten id:llä ${idaccounts}`);
-    const account = await getAccountsById(req.pool, idaccounts);
-    if (!account) {
-      return res.status(404).json({
-        success: false,
-        message: 'Account not found',
-      });
-    }
+  // Tarkistetaan tilin tyyppi credit/debit
+  if (account.type === 'credit') {
 
-    // Tarkistetaan tilin tyyppi credit/debit
-    if (account.type === 'credit') {
-
-    // Tarkistetaan, onko tilillä tarpeeksi rahaa
-    if (account.creditlimit < amount) {
-      return res.status(400).json({
-        success: false,
-        message: 'Insufficient balance for this withdrawal',
-      });
-    }
+  // Tarkistetaan, onko tilillä tarpeeksi rahaa
+  if (account.creditlimit < amount) {
+    return res.status(400).json({
+      success: false,
+      message: 'Insufficient balance for this withdrawal',
+    });
+  }
 
    // Lasketaan uusi saldo
    let newCreditLimit = account.creditlimit - amount;
@@ -100,7 +99,6 @@ router.post('/', async (req, res) => {
    await updateAccounts(req.pool, idaccounts, updatedAccountData);
 
    const newTransaction = await addTransaction(req.pool, {
-
     amount: amount,
     idaccounts: idaccounts
    });
@@ -113,9 +111,7 @@ router.post('/', async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Insufficient balance for this withdrawal',
-      });
-
-      
+      }); 
     }
 
    // Lasketaan uusi saldo
@@ -134,7 +130,6 @@ router.post('/', async (req, res) => {
    await updateAccounts(req.pool, idaccounts, updatedAccountData);
 
    const newTransaction = await addTransaction(req.pool, {
-
     amount: amount,
     idaccounts: idaccounts
    });
@@ -172,8 +167,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-//poistaa transaction
-
+//poistaa transactionin
 router.delete ('/:id', async (req, res) => {
   try {
     const message = await deleteTransaction(req.pool, req.params.id); //kutsuu modelin deleteTransaction funktiota
@@ -183,6 +177,5 @@ router.delete ('/:id', async (req, res) => {
     res.status(404),json({error: error.message});
   }
 });
-
 
 export default router;

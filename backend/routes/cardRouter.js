@@ -6,7 +6,7 @@ import { deleteCard } from '../models/cardModel.js';
 import { updateCardLocked } from '../models/cardModel.js';  // Import the model function
 const router = express.Router();
 
-// GET all cards
+// Hakee kaikki kortit
 router.get('/', async (req, res) => {
   try {
     const cards = await getAllCards(req.pool);
@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
   res.json({ message: 'Get all cards' });
 }});
 
-// GET a single card by ID
+// Hakee kortin ID:n perusteella
 router.get('/:id', async (req, res) => {
   try {
     const card = await getCardById(req.pool, req.params.id);
@@ -31,7 +31,7 @@ router.get('/:id', async (req, res) => {
   res.json({ message: `Get card with ID: ${id}` });
 }});
 
-// POST create a new card
+// Luo uuden kortin
 router.post('/', async (req, res) => {
   try {
     console.log("Request body:", req.body); // Loggaa saapuva syöte
@@ -66,11 +66,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-
-
-
-// PUT update a card by ID
-
+// Kortin päivitys ID:n perusteella
 router.put('/:id', async (req, res) => {
   try{
     const updatedCard = await updateCard(req.pool, req.params.id, req.body);
@@ -81,8 +77,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// UPDATE only locked for login purposes
-
+// Tarkistetaan onko lukittu, jatketaanko loginia
 router.put('/:id/lock', async (req, res) => {
   try {
     if (req.body.locked === undefined) {
@@ -98,9 +93,7 @@ router.put('/:id/lock', async (req, res) => {
   }
 });
 
-
-// DELETE a card by ID
-
+// Poistetaan kortti ID:n perusteella
 router.delete('/:id', async (req, res) => {
   try{
     const card = await deleteCard(req.pool, req.params.id);
@@ -109,7 +102,6 @@ router.delete('/:id', async (req, res) => {
     console.error(error.message);
     res.status(400).json({ success: false, error: error.message });
   }
-
   });
 
 export default router;

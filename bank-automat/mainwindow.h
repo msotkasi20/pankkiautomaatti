@@ -5,7 +5,6 @@
 #include <QEvent>
 #include "keyboard.h"
 
-
 class keyboard;
 
 QT_BEGIN_NAMESPACE
