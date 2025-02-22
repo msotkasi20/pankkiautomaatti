@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent)
     timer -> start();
 
     QDateTime dateTime = QDateTime::currentDateTime();
-    QString datetimetext=dateTime.toString();
+    QString datetimetext=dateTime.toString("dd MMMM");
     ui->dateTime->setText(datetimetext);
 
     ui->username->installEventFilter(this);
