@@ -44,7 +44,7 @@ color: white;</string>
     <rect>
      <x>630</x>
      <y>490</y>
-     <width>61</width>
+     <width>111</width>
      <height>51</height>
     </rect>
    </property>
@@ -67,7 +67,7 @@ color: white;</string>
     <rect>
      <x>20</x>
      <y>20</y>
-     <width>121</width>
+     <width>151</width>
      <height>20</height>
     </rect>
    </property>

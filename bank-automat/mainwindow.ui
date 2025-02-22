@@ -230,7 +230,7 @@ color: white;
      <rect>
       <x>670</x>
       <y>500</y>
-      <width>61</width>
+      <width>121</width>
       <height>51</height>
      </rect>
     </property>
@@ -259,7 +259,7 @@ color: white;
      <x>0</x>
      <y>0</y>
      <width>812</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
