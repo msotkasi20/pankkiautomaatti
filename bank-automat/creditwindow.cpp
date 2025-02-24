@@ -27,6 +27,9 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
 
     ui->setupUi(this);
 
+    ui->nextButton->hide();
+    ui->prevButton->hide();
+
     virtualKeyboard = new keyboard(nullptr, this);
     virtualKeyboard->move(440,200);
     virtualKeyboard->close();
@@ -322,13 +325,19 @@ void creditwindow::showPage1()
     ui->stackedWidget->setCurrentIndex(0); //Näyttää "Nosto" sivun
 
     virtualKeyboard->show();
+    ui->nextButton->hide();
+    ui->prevButton->hide();
 }
 
 void creditwindow::showPage2()
 {
     ui->stackedWidget->setCurrentIndex(1);
 
+    ui->nextButton->show();
+    ui->prevButton->show();
+
     virtualKeyboard->close();
+
 }
 
 void creditwindow::showPage3()
@@ -336,6 +345,8 @@ void creditwindow::showPage3()
     ui->stackedWidget->setCurrentIndex(3);
 
     virtualKeyboard->close();
+    ui->nextButton->hide();
+    ui->prevButton->hide();
 }
 
 void creditwindow::logOut()
