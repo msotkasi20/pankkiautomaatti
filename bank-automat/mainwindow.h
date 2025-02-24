@@ -31,6 +31,7 @@ private:
     int loginCounter = 0;
 
     void lockCard(int idcard);
+    void clearFields();
 
 private slots:
     void showTime();

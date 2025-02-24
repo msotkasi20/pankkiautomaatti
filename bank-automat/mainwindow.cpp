@@ -176,9 +176,14 @@ void MainWindow::on_loginBtn_clicked()
                                 if (choice == "Credit") {
                                     creditwindow *creditWindow = new creditwindow(idcard, this);
                                     creditWindow->show();
+                                    clearFields();
+
+
                                 } else if (choice == "Debit"){
                                     debitwindow *debitWindow = new debitwindow(idcard, this);
                                     debitWindow->show();
+                                    clearFields();
+
                                 }
 
                             } else {
@@ -223,6 +228,13 @@ void MainWindow::on_loginBtn_clicked()
         reply->deleteLater();
     });
 }
+
+void MainWindow::clearFields() {
+    ui->username->clear();
+    ui->cardpin->clear();
+}
+
+
 
 void MainWindow::showKeyboard(QLineEdit *targetField)
 {
