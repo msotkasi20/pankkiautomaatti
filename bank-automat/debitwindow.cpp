@@ -32,6 +32,9 @@ debitwindow::debitwindow(const QString &idcard, QWidget *parent)
     virtualKeyboard->move(440,200);
     virtualKeyboard->close();
 
+    ui->nextButton->hide();
+    ui->prevButton->hide();
+
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
     timer -> start();
@@ -321,20 +324,26 @@ void debitwindow::showPage1()
     ui->stackedWidget->setCurrentIndex(0); //Näyttää "Nosto" sivun
 
     virtualKeyboard->show();
+    ui->nextButton->hide();
+    ui->prevButton->hide();
 }
 
 void debitwindow::showPage2()
 {
-    ui->stackedWidget->setCurrentIndex(1);
+    ui->stackedWidget->setCurrentIndex(1); // Näyttää saldon/luottorajan
 
     virtualKeyboard->close();
+    ui->nextButton->show();
+    ui->prevButton->show();
 }
 
 void debitwindow::showPage3()
 {
-    ui->stackedWidget->setCurrentIndex(3);
+    ui->stackedWidget->setCurrentIndex(3); // Näyttää tilitapahtumat
 
     virtualKeyboard->close();
+    ui->nextButton->hide();
+    ui->prevButton->hide();
 }
 
 void debitwindow::logOut()
