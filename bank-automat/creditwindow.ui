@@ -90,9 +90,9 @@ color: white;</string>
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>200</y>
-     <width>161</width>
-     <height>181</height>
+     <y>90</y>
+     <width>151</width>
+     <height>301</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -177,10 +177,10 @@ color: white;</string>
   <widget class="QStackedWidget" name="stackedWidget">
    <property name="geometry">
     <rect>
-     <x>320</x>
-     <y>150</y>
-     <width>341</width>
-     <height>261</height>
+     <x>280</x>
+     <y>70</y>
+     <width>421</width>
+     <height>341</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -200,16 +200,13 @@ QStackedWidget {
 </string>
    </property>
    <property name="frameShape">
-    <enum>QFrame::Shape::Panel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Shadow::Raised</enum>
+    <enum>QFrame::NoFrame</enum>
    </property>
    <property name="lineWidth">
     <number>5</number>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="page">
     <property name="styleSheet">
@@ -221,8 +218,8 @@ color: white;</string>
       <rect>
        <x>20</x>
        <y>34</y>
-       <width>95</width>
-       <height>181</height>
+       <width>111</width>
+       <height>261</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -321,8 +318,8 @@ color: white;
     <widget class="QPushButton" name="withdrawBtn">
      <property name="geometry">
       <rect>
-       <x>130</x>
-       <y>220</y>
+       <x>160</x>
+       <y>290</y>
        <width>51</width>
        <height>29</height>
       </rect>
@@ -345,10 +342,10 @@ color: white;
     <widget class="QLineEdit" name="nostoSumma">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>220</y>
-       <width>113</width>
-       <height>28</height>
+       <x>20</x>
+       <y>290</y>
+       <width>121</width>
+       <height>31</height>
       </rect>
      </property>
      <property name="font">
@@ -366,9 +363,9 @@ color: white;
     <widget class="QLabel" name="uusicreditlimit">
      <property name="geometry">
       <rect>
-       <x>190</x>
-       <y>220</y>
-       <width>81</width>
+       <x>230</x>
+       <y>280</y>
+       <width>101</width>
        <height>31</height>
       </rect>
      </property>
@@ -383,6 +380,12 @@ color: white;
     </widget>
    </widget>
    <widget class="QTableView" name="tilitapahtumatView">
+    <property name="maximumSize">
+     <size>
+      <width>16777215</width>
+      <height>16777215</height>
+     </size>
+    </property>
     <property name="font">
      <font>
       <family>Arial</family>
@@ -417,10 +420,13 @@ QTableView {
 </string>
     </property>
     <property name="frameShape">
-     <enum>QFrame::Shape::NoFrame</enum>
+     <enum>QFrame::NoFrame</enum>
     </property>
-    <property name="frameShadow">
-     <enum>QFrame::Shadow::Plain</enum>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
     <property name="showDropIndicator" stdset="0">
      <bool>false</bool>
@@ -431,9 +437,9 @@ QTableView {
     <widget class="QWidget" name="horizontalLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>90</y>
-       <width>241</width>
+       <x>60</x>
+       <y>130</y>
+       <width>301</width>
        <height>81</height>
       </rect>
      </property>

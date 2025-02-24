@@ -90,9 +90,9 @@ color: white;</string>
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>200</y>
-     <width>161</width>
-     <height>181</height>
+     <y>90</y>
+     <width>151</width>
+     <height>301</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -183,10 +183,10 @@ color: white;
    </property>
    <property name="geometry">
     <rect>
-     <x>320</x>
-     <y>150</y>
-     <width>341</width>
-     <height>261</height>
+     <x>280</x>
+     <y>70</y>
+     <width>421</width>
+     <height>341</height>
     </rect>
    </property>
    <property name="font">
@@ -209,7 +209,7 @@ QStackedWidget {
 </string>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="page">
     <widget class="QWidget" name="verticalLayoutWidget">
@@ -217,8 +217,8 @@ QStackedWidget {
       <rect>
        <x>20</x>
        <y>34</y>
-       <width>95</width>
-       <height>181</height>
+       <width>111</width>
+       <height>251</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -317,8 +317,8 @@ color: white;
     <widget class="QPushButton" name="withdrawBtn">
      <property name="geometry">
       <rect>
-       <x>130</x>
-       <y>220</y>
+       <x>150</x>
+       <y>290</y>
        <width>51</width>
        <height>29</height>
       </rect>
@@ -341,8 +341,8 @@ color: white;
     <widget class="QLineEdit" name="nostoSumma">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>220</y>
+       <x>20</x>
+       <y>290</y>
        <width>113</width>
        <height>28</height>
       </rect>
@@ -356,8 +356,8 @@ color: white;
     <widget class="QLabel" name="uusiBalance">
      <property name="geometry">
       <rect>
-       <x>190</x>
-       <y>220</y>
+       <x>220</x>
+       <y>290</y>
        <width>81</width>
        <height>31</height>
       </rect>
@@ -412,10 +412,10 @@ QTableView {
     <widget class="QWidget" name="horizontalLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>40</x>
-       <y>90</y>
-       <width>241</width>
-       <height>81</height>
+       <x>80</x>
+       <y>120</y>
+       <width>261</width>
+       <height>91</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">

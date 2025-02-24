@@ -29,7 +29,7 @@ debitwindow::debitwindow(const QString &idcard, QWidget *parent)
     ui->setupUi(this);
 
     virtualKeyboard = new keyboard(nullptr, this);
-    virtualKeyboard->move(440,200);
+    virtualKeyboard->move(440,150);
     virtualKeyboard->close();
 
     QTimer *timer = new QTimer(this);
