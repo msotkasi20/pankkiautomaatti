@@ -45,8 +45,8 @@ private:
     void closeDueToInactivity();
 
     QList<QPair<QString, QString>> allTransactions;
-    int currentPage = 0;   // Tracks the current page number
-    int rowsPerPage = 10;  // Defines how many rows per page
+    int currentPage = 0;   // Seuraa nykyistä sivunumeroa
+    int rowsPerPage = 10;  // Määrittää montako riviä sivulla
 
 protected:
     bool eventFilter(QObject *obj, QEvent *event) override;

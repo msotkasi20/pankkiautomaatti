@@ -1,4 +1,6 @@
 // models/transactionModel.js
+
+// Hakee kaikki transactiot
 export async function getAlltransaction(pool) {
     try {
       const [rows] = await pool.query('SELECT * FROM transaction');
@@ -8,18 +10,20 @@ export async function getAlltransaction(pool) {
     }
   }
   
+  // Hakee transactionin ID:n perusteella
   export async function getTransactionById(pool, id) {
     try {
       const [rows] = await pool.query('SELECT * FROM transaction WHERE idtransaction = ?', [id]);
       if (rows.length === 0) {
         throw new Error('Transaction not found');
       }
-      return rows[0]; // Palauttaa yksittäisen transaction
+      return rows[0]; // Palauttaa yksittäisen transactionin
     } catch (error) {
       throw new Error(`Database error: ${error.message}`);
     }
   }
 
+  // Hakee transactionin tilin ID:n perusteella
   export async function getTransactionByAccountId(pool, id) {
     try {
       const [rows] = await pool.query('SELECT * FROM transaction WHERE idaccounts = ?', [id]);
@@ -32,6 +36,7 @@ export async function getAlltransaction(pool) {
     }
   }
   
+  // Lisää uuden transactionin
   export async function addTransaction(pool, transactionData) {
     try {
       const [result] = await pool.query(
@@ -44,6 +49,7 @@ export async function getAlltransaction(pool) {
     }
   }
 
+  // Päivittää transactionin tiedot
   export async function updateTransaction(pool, id, transactionData) {
     try {
       const [result]= await pool.query(
@@ -59,6 +65,7 @@ export async function getAlltransaction(pool) {
     }
   }
 
+  // Poistaa transactionin
   export async function deleteTransaction(pool, id) {
     try {
       const [result] = await pool.query('DELETE FROM transaction WHERE idtransaction = ?', [id] );

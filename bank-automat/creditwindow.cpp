@@ -42,7 +42,7 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
     QString datetimetext=dateTime.toString("dd MMMM");
     ui->dateTime->setText(datetimetext);
 
-    inactivityTimer->setInterval(30000); // 30 sekunttia
+    inactivityTimer->setInterval(30000); // 30 sekuntia
     connect(inactivityTimer, &QTimer::timeout, this, &creditwindow::closeDueToInactivity);
     inactivityTimer->start();
 
@@ -73,8 +73,6 @@ creditwindow::creditwindow(const QString &idcard, QWidget *parent)
         creditWithdraw(amount);
         fetchTransactions();
     });
-
-
 }
 
 creditwindow::~creditwindow()
@@ -107,7 +105,7 @@ void creditwindow::creditWithdraw(int amount)
 
     ui->uusicreditlimit->setText("Nostit: " + QString::number(amount));
 
-     QTimer::singleShot(500, this, &creditwindow::fetchCreditAccount);
+    QTimer::singleShot(500, this, &creditwindow::fetchCreditAccount);
 
     } else if (amount % 10 != 0){
         QMessageBox nostoError;
@@ -135,7 +133,7 @@ void creditwindow::fetchCreditAccount()
 
     connect(reply, &QNetworkReply::finished, this, [reply, this](){
         if (reply->error() == QNetworkReply::NoError){
-            //Parse the JSON response
+            //Parseroidaan JSON vastaus
             QByteArray responseData = reply->readAll();
             QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
             QJsonObject jsonObj = jsonDoc.object();
@@ -208,7 +206,7 @@ void creditwindow::fetchTransactions()
                     return;
                 }
 
-                // Store transactions in memory
+                // Tallennetaan transaction
                 allTransactions.clear();
                 for (const auto &value : dataArray) {
                     if (value.isObject()) {
@@ -219,7 +217,7 @@ void creditwindow::fetchTransactions()
                     }
                 }
 
-                // Käännettän listan järjestys viimeisin transactio ylimmäiseksi
+                // Käännettän listan järjestys viimeisin transaction ylimmäiseksi
                 std::reverse(allTransactions.begin(), allTransactions.end());
 
                 // Sivun nollaus
@@ -249,7 +247,7 @@ void creditwindow::updateTableView()
     int startRow = currentPage * rowsPerPage;
     int endRow = qMin(startRow + rowsPerPage, allTransactions.size());
 
-    // Näytetään relevantti transactio
+    // Näytetään relevantti transaction
     for (int i = startRow; i < endRow; ++i) {
         QList<QStandardItem *> rowItems;
         rowItems.append(new QStandardItem(allTransactions[i].first));

@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 
+// Hakee kaikki kortit
 export async function getAllCards(pool) {
     try{
         const [rows] = await pool.query('SELECT * FROM card');
@@ -9,6 +10,7 @@ export async function getAllCards(pool) {
     }   
 }
 
+// Hakee kortin ID:n perusteella
 export async function getCardById(pool, id) {
     try{
         const [rows] = await pool.query('SELECT * FROM card WHERE idcard = ?', [id]);
@@ -21,6 +23,7 @@ export async function getCardById(pool, id) {
     }
 }
 
+// Salakoodaa kortin PIN-koodi
 export async function encryptCardPin(cardpin) {
     try {
       const salt = await bcrypt.genSalt(10);
@@ -31,8 +34,7 @@ export async function encryptCardPin(cardpin) {
     }
   }
 
-    // Luodaan kortti tietokantaan, PIN-koodin kryptaus
-    
+// Luodaan kortti tietokantaan, PIN-koodin kryptaus  
 export async function createCard(pool, card) {
     try {
         console.log("Received card object:", card); // Loggaa kortin tiedot
@@ -59,6 +61,7 @@ export async function createCard(pool, card) {
         }
       }
       
+// Päivitetään kortin tiedot
 export async function updateCard(pool, id, card){
     try {
         const [rows] = await pool.query('UPDATE card SET type = ?, cardpin = ?, locked = ? WHERE idcard = ?', [card.type, card.cardpin, card.locked, id]);
@@ -71,6 +74,7 @@ export async function updateCard(pool, id, card){
     }
 }
 
+// Päivitetään kortin lukitustieto
 export async function updateCardLocked(pool, id, locked) {
     try {
         const [result] = await pool.query(
@@ -88,7 +92,7 @@ export async function updateCardLocked(pool, id, locked) {
     }
 }
 
-
+// Poistetaan kortti
 export async function deleteCard(pool, id){
     try{
         const [rows] = await pool.query('DELETE FROM card WHERE idcard = ?', [id]);

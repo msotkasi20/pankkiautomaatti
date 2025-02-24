@@ -21,24 +21,23 @@ router.post('/', async (req, res) => {
 
     if (card) {
 
-      //Tarkistetaan onko kortti lukittu
-
+    //Tarkistetaan onko kortti lukittu
     if (card.locked) {
       console.log("Card is locked");
       return res.status(403).json({ success: false, message: "Card is locked" });
     }
 
-      // Vertaillaan bcryptillä tallennettua PIN-koodia
-      const isMatch = await bcrypt.compare(cardpin, card.cardpin);
+    // Vertaillaan bcryptillä tallennettua PIN-koodia
+    const isMatch = await bcrypt.compare(cardpin, card.cardpin);
 
-      if (isMatch) {
-        console.log("Login success");
-        const token = generateAccessToken({ idcard });
-        res.status(200).json({ success: true, token });
-      } else {
-        console.log("Invalid PIN");
-        res.status(401).json({ success: false, message: "Invalid PIN" });
-      }
+    if (isMatch) {
+      console.log("Login success");
+      const token = generateAccessToken({ idcard });
+      res.status(200).json({ success: true, token });
+    } else {
+      console.log("Invalid PIN");
+      res.status(401).json({ success: false, message: "Invalid PIN" });
+    }
     } else {
       console.log("Card not found");
       res.status(404).json({ success: false, message: "Card not found" });

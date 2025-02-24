@@ -1,7 +1,7 @@
 export async function getAllAccountsCards(pool) {
     try {
       const [rows] = await pool.query('SELECT * FROM accounts_cards');
-      return rows; // Palauttaa tilit+kortit taulukkona
+      return rows; // Palauttaa tilit ja kortit taulukkona
     } catch (error) {
       throw new Error(`Database error: ${error.message}`);
     }
@@ -16,7 +16,7 @@ export async function getAllAccountsCards(pool) {
         WHERE ac.idcard = ? AND a.type = ?
       `;
       const [rows] = await pool.query(query, [idcard, type]);
-      return rows; // Return the accounts as an array
+      return rows; // Palauttaa tilit taulukkona
     } catch (error) {
       throw new Error(`Database error: ${error.message}`);
     }

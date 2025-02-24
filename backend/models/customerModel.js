@@ -1,5 +1,6 @@
 // models/customerModel.js
 
+// Hakee kaikki asiakkaat
 export async function getAllCustomers(pool) {
   try {
       const [rows] = await pool.query('SELECT * FROM customer');
@@ -9,6 +10,7 @@ export async function getAllCustomers(pool) {
   }
 }
 
+// Hakee asiakkaan ID:n perusteella
 export async function getCustomerById(pool, id) {
   try {
       const [rows] = await pool.query('SELECT * FROM customer WHERE idcustomer = ?', [id]);
@@ -21,6 +23,7 @@ export async function getCustomerById(pool, id) {
   }
 }
 
+// Lisää uuden asiakkaan
 export async function createCustomer(pool, customer) {
   try {
       const [rows] = await pool.query(
@@ -33,6 +36,7 @@ export async function createCustomer(pool, customer) {
   }
 }
 
+// Päivittää asiakkaan tiedot
 export async function updateCustomer(pool, id, customer) {
   try {
       const [result] = await pool.query(
@@ -48,6 +52,7 @@ export async function updateCustomer(pool, id, customer) {
   }
 }
 
+// Poistaa asiakkaan
 export async function deleteCustomer(pool, id) {
   try {
       const [result] = await pool.query('DELETE FROM customer WHERE idcustomer = ?', [id]);
