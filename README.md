@@ -27,6 +27,11 @@ QT sovellukseen lisätty valikko StackedWidgetin avulla, josta käyttäjä voi v
 ## Nosto ikkuna luotu
 QT sovellukseen luotu näkymä, josta käyttäjä voi nostaa 20, 40, 50, 100 tai muun summan (10 euron tarkkuudella). Creditlimit päivittyy reaaliajassa, jokaisen noston yhteydessä. 
 
+## Tilitapahtumat näkymä luotu
+QT sovellukseen luotu näkymä, johon listautuu käyttäjän tilitapahtumat uusimmasta vanhimpaan.
+
+## Debit ikkunaan lisätty samat toiminnot kuin credit ikkunaan
+
 ## Ulkonäköä päivitetty
 Credit ja debit ikkunoiden ulkonäköä päivitetty. Buttonit, virtualkeyboard ja line edittejä siistitty.
 
