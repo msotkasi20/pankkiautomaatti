@@ -15,7 +15,7 @@ import {
 
 const router = express.Router();
 
-// Hakee kaikki transactiot
+// Hakee kaikki transactionit
 router.get('/', async (req, res, next) => {
   try {
     const transaction = await getAlltransaction(req.pool);
@@ -26,7 +26,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// Hakee yksittäisen transaction ID:n perusteella
+// Hakee yksittäisen transactionin ID:n perusteella
 router.get('/:id', async (req, res, next) => {
   try {
     const transaction = await getTransactionById(req.pool, req.params.id);
@@ -37,7 +37,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-// Hakee kaikki transaktiot tilin id:n perusteella
+// Hakee kaikki transaktionit tilin id:n perusteella
 router.get('/byAccountId/:id', async (req, res, next) => {
   try {
     const transaction = await getTransactionByAccountId(req.pool, req.params.id);
@@ -48,7 +48,7 @@ router.get('/byAccountId/:id', async (req, res, next) => {
   }
 });
 
-//luo uuden transaction
+//luo uuden transactionin
 router.post('/', async (req, res) => {
 
   const {amount, idaccounts } = req.body;
@@ -143,7 +143,7 @@ router.post('/', async (req, res) => {
 }
 });
 
-//päivittää olemassa olevan transaction
+//päivittää olemassa olevan transactionin
 router.put('/:id', async (req, res) => {
 
   const { action, actiontimestamp, amount, idaccounts } = req.body;

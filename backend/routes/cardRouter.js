@@ -14,7 +14,6 @@ router.get('/', async (req, res) => {
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ success: false, error: error.message });
-  // Logic to fetch all cards
   res.json({ message: 'Get all cards' });
 }});
 
@@ -27,7 +26,6 @@ router.get('/:id', async (req, res) => {
     console.error(error.message);
     res.status(404).json({ success: false, error: error.message });
   const { id } = req.params;
-  // Logic to fetch a card by ID
   res.json({ message: `Get card with ID: ${id}` });
 }});
 

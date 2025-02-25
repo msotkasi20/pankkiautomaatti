@@ -48,7 +48,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// Poista tili
+// Poistaa tilin
 router.delete('/:id', async (req, res) => {
   try {
     await deleteAccounts(req.pool, req.params.id);

@@ -43,7 +43,7 @@ debitwindow::debitwindow(const QString &idcard, QWidget *parent)
     QString datetimetext=dateTime.toString("dd MMMM");
     ui->dateTime->setText(datetimetext);
 
-    inactivityTimer->setInterval(30000); // 30 sekunttia
+    inactivityTimer->setInterval(30000); // 30 sekuntia
     connect(inactivityTimer, &QTimer::timeout, this, &debitwindow::closeDueToInactivity);
     inactivityTimer->start();
 
@@ -134,7 +134,7 @@ void debitwindow::fetchDebitAccount()
 
     connect(reply, &QNetworkReply::finished, this, [reply, this](){
         if (reply->error() == QNetworkReply::NoError){
-            //Parse the JSON response
+            //Parseroidaan JSON vastaus
             QByteArray responseData = reply->readAll();
             QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
             QJsonObject jsonObj = jsonDoc.object();
@@ -207,7 +207,7 @@ void debitwindow::fetchTransactions()
                     return;
                 }
 
-                // Tallennetaan transactionsit
+                // Tallennetaan transactionit
                 allTransactions.clear();
                 for (const auto &value : dataArray) {
                     if (value.isObject()) {
@@ -259,7 +259,7 @@ void debitwindow::updateTableView()
     tableView->setModel(transactionModel);
     tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    // Enable/Disable navigation buttons based on available pages
+    // Enabloi/Disabloi navigaatio buttons käytettäville sivuille
     ui->prevButton->setEnabled(currentPage > 0);
     ui->nextButton->setEnabled(endRow < allTransactions.size());
 }

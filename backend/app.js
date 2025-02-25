@@ -11,6 +11,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+// Tiedostopolkujen määrittäminen
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -25,7 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(path.resolve(), 'public')));
 
-// Tietokanta connection pool
+// Määritetään tietokantayhteyksien pooli
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -36,6 +37,7 @@ const pool = mysql.createPool({
   queueLimit: 0,
 });
 
+// Tietokantayhteyden lisääminen pyyntöihin
 app.use((req, res, next) => {
   req.pool = pool; // Lisätään tietokanta pool req. muuttujaan
   next();
@@ -55,4 +57,5 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!');
 });
 
+// Sovelluksen vienti
 export default app;
