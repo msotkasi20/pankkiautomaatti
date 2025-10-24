@@ -1,5 +1,8 @@
 # Tämä on OAMK Ohjelmistokehitysprojektin harjoitustyö (syksy 2025), tehty ryhmätyönä.
-Kyseessä on pankkiautomaatti, jossa frontend on tehty QtCreatorilla ja backend NodeJs/Express ja MySQL.
+Kyseessä on pankkiautomaatti,
+C++/Qt-pohjainen desktop-sovellus, joka käyttää Node.js/Express-REST-APIa ja MySQL-tietokantaa. Qt:n puolella QNetworkAccessManager hoitaa API-kutsut (JSON).
+
+This application is an ATM, Desktop app in C++/Qt consuming a Node.js/Express REST API with a MySQL database. Qt uses QNetworkAccessManager for JSON requests.
 
 # group_5 (alkuperäinen päiväkirjamainen readme)
 
