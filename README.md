@@ -1,4 +1,4 @@
-# Tämä on OAMK Ohjelmistokehitysprojektin harjoitustyö, tehty ryhmätyönä.
+# Tämä on OAMK Ohjelmistokehitysprojektin harjoitustyö (syksy 2025), tehty ryhmätyönä.
 Kyseessä on pankkiautomaatti, jossa frontend on tehty QtCreatorilla ja backend NodeJs/Express ja MySQL.
 
 # group_5 (alkuperäinen päiväkirjamainen readme)
@@ -40,6 +40,3 @@ Credit ja debit ikkunoiden ulkonäköä päivitetty. Buttonit, virtualkeyboard j
 
 ## TableView päivitetty ja kirjautumisikkunan tiedot tyhjennetty
 TableViewtä säädetty näyttämään 10 viimeisintä tilitapahtumaan ilman scrollausta. Kirjautumisikkunasta poistettu tiedot näkyvistä, kun debit tai credit ikkuna aukaistaan.
-
-## Projektin posteri
-<img width="248" alt="kuvakaappausposteri" src="https://github.com/user-attachments/assets/60ba9318-6c21-48f1-8818-6263f96feaf7" />
