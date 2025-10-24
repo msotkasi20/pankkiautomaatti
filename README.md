@@ -1,4 +1,7 @@
-# group_5
+# Tämä on OAMK Ohjelmistokehitysprojektin harjoitustyö, tehty ryhmätyönä.
+Kyseessä on pankkiautomaatti, jossa frontend on tehty QtCreatorilla ja backend NodeJs/Express ja MySQL.
+
+# group_5 (alkuperäinen päiväkirjamainen readme)
 
 ## Backend alustus (routers & models)
 Backend alustettu, routerit ja modelsit luotu / tehty, sekä varmistettu, että toimii
